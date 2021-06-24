@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, FC} from 'react';
 import {
   TouchableOpacity,
   SafeAreaView,
@@ -20,6 +20,10 @@ import {
 
 import bgImage from './images/bg.png';
 
+type AProps = {
+  ticket?: string,
+};
+
 // 动作库
 const move = ['举手', '投足', '挤眉', '弄眼', '转头'];
 // 语言库
@@ -30,7 +34,8 @@ const speak = ['钱', '衣服', '聊宠物', '车', '歌手'];
  * 倒计时5秒后选择动作库或者语言库内任意一个词展示
  */
 
-const App = () => {
+const App: FC<AProps> = props => {
+  const {ticket} = props;
   const [select, setSelect] = useState('请开始游戏');
   const [target, setTarget] = useState('');
   const [isCountDown, setIsCountDown] = useState(false);
@@ -50,6 +55,7 @@ const App = () => {
   };
 
   const handleStart = () => {
+    console.log(123);
     setIsCountDown(true);
     random();
   };
