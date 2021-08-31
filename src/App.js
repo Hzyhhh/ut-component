@@ -38,8 +38,8 @@ const App: FC<AProps> = props => {
   const {ticket} = props;
   const [select, setSelect] = useState('请开始游戏');
   const [target, setTarget] = useState('');
-  const [isCountDown, setIsCountDown] = useState(false);
   const [countdown, setCountDown] = useState(5);
+  const [isCountDown, setIsCountDown] = useState(false);
 
   const random = () => {
     const arr = move.concat(speak);
