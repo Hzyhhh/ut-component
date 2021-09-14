@@ -4,10 +4,12 @@ build-job:
     - echo "Hello, $GITLAB_USER_LOGIN!"
 
 build:
-  stage: yarn
+  stage: build
   image: node:lts
-  only: release
-  script: yarn
+  only: 
+    -  release
+  script: 
+    - yarn
 
 test-job1:
   stage: test
