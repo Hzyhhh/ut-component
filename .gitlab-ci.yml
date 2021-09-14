@@ -1,8 +1,3 @@
-build-job:
-  stage: build
-  script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
-
 test-job1:
   stage: test
   script:
@@ -15,6 +10,19 @@ test-job2:
     - echo "After the echo commands complete, it runs the sleep command for 20 seconds"
     - echo "which simulates a test that runs 20 seconds longer than test-job1"
     - sleep 20
+
+build-job:
+  stage: build
+  script:
+    - echo "Hello, $GITLAB_USER_LOGIN!"
+
+build:
+  stage: build
+  image: node:lts
+  only:
+    - release
+  script:
+    - yarn
 
 deploy-prod:
   stage: deploy
