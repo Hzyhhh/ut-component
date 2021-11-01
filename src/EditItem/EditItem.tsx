@@ -59,7 +59,7 @@ const App: FC<AProps> = props => {
   };
 
   useEffect(() => {
-    let timer: number;
+    let timer: NodeJS.Timer;
 
     if (isCountDown) {
       timer = setInterval(() => {
