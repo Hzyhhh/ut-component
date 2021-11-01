@@ -1,8 +1,8 @@
 {
-  "name": "ut-edit-item",
+  "name": "ut-component",
   "version": "0.0.1",
   "private": true,
-  "description": "UT EditItem Component",
+  "description": "UT Business Component",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "keywords": [
@@ -12,16 +12,15 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf node_modules",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "bind": "adb reverse tcp:8081 tcp:8081",
+    "start": "react-scripts start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@babel/preset-react": "^7.16.0",
     "@babel/runtime": "^7.12.5",
+    "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/react-native": "^0.64.0",
     "eslint": "^7.14.0",
@@ -30,6 +29,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
+    "@ui-kitten/components": "^5.1.1",
     "react": "17.0.1",
     "react-native": "0.64.0"
   },

@@ -60,3 +60,4 @@ buck-out/
 
 # Other
 dist/
+example/
