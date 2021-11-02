@@ -1,4 +1,5 @@
 import UTable, {UTableProps} from './UTable';
+import ItemRendered from './ItemRendered';
 import {
   UTableCommonItemBase,
   ColumnsBase,
@@ -19,4 +20,8 @@ export type {
   ElementTitleCellRendered,
 };
 
+// @ts-ignore
+UTable.ItemRendered = ItemRendered;
+
+export {UTable, ItemRendered};
 export default UTable;

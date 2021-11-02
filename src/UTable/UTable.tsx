@@ -7,25 +7,8 @@ import React, {
 } from 'react';
 import {FlatList, ListRenderItem} from 'react-native';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import {ColumnsBase} from './type';
+import {ColumnsBase, UTableCommonItemBase, UTableMethods} from './type';
 import ItemRendered from './ItemRendered';
-
-export interface UTableCommonItemBase {
-  id: string;
-  sortId: number;
-  /**
-   * 未完成 未上传 => 未执行
-   * 已完成 未上传 => 离线已执行
-   * 未完成 已上传 => 不存在这种情况
-   * 已完成 已上传 => 已调接口执行
-   */
-  isFinished: boolean;
-  isUploaded: boolean;
-}
-
-export interface UTableMethods<T> {
-  getList: () => T[];
-}
 
 export interface UTableProps<T extends UTableCommonItemBase> {
   wrapperComponentRef?: React.Ref<UTableMethods<T>>;
@@ -38,7 +21,7 @@ export interface UTableProps<T extends UTableCommonItemBase> {
   /**
    * 定义表单字段
    */
-  columns: ColumnsBase[];
+  columns: ColumnsBase<T>[];
   /**
    * 表单主要信息
    */
@@ -117,8 +100,14 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
    * 渲染操作项
    */
   const renderItem: ListRenderItem<T> = useCallback(params => {
-    const {item} = params;
-    return <ItemRendered data={item} column={columns} />;
+    // const {item} = params;
+    return (
+      <ItemRendered
+        dataSource={dataSource}
+        column={columns}
+        instance={UTableRef}
+      />
+    );
   }, []);
 
   useEffect(() => {
