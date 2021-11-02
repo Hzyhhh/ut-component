@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, {Component} from 'react';
-import {StyleSheetProperties, TextStyle, View} from 'react-native';
+import {StyleProp, StyleSheetProperties, TextStyle, View, ViewStyle} from 'react-native';
 
 export class Table extends Component<
   Partial<{style: StyleSheetProperties; borderStyle: TextStyle}>
@@ -39,7 +39,7 @@ export class Table extends Component<
 }
 
 export class TableWrapper extends Component<
-  Partial<{style: StyleSheetProperties}>
+  Partial<{style: StyleProp<ViewStyle>}>
 > {
   _renderChildren(props) {
     return React.Children.map(props.children, child =>

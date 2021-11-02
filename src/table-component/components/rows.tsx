@@ -1,13 +1,6 @@
 // @ts-nocheck
 import React, {Component} from 'react';
-import {
-  View,
-  ViewPropTypes,
-  Text,
-  StyleSheet,
-  StyleSheetProperties,
-  TextStyle,
-} from 'react-native';
+import {View, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 import {Cell} from './cell';
 import {sum} from '../utils';
 
@@ -17,7 +10,7 @@ export class Row extends Component<
     widthArr;
     height;
     flexArr;
-    style: StyleSheetProperties;
+    style: ViewStyle;
     textStyle: TextStyle;
   }>
 > {
@@ -61,7 +54,7 @@ export class Rows extends Component<
     widthArr;
     heightArr;
     flexArr;
-    style: StyleSheetProperties;
+    style: ViewStyle;
     textStyle: TextStyle;
   }>
 > {
