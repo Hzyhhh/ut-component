@@ -60,4 +60,4 @@ buck-out/
 
 # Other
 dist/
-example/
+example/node_modules/
