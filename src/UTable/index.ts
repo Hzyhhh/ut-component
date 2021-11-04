@@ -7,6 +7,7 @@ import {
   ItemRenderedProps,
   ElementCellRendered,
   ElementTitleCellRendered,
+  DataSourceType,
 } from './type';
 
 export type {UTableProps};
@@ -18,6 +19,7 @@ export type {
   ItemRenderedProps,
   ElementCellRendered,
   ElementTitleCellRendered,
+  DataSourceType,
 };
 
 // @ts-ignore

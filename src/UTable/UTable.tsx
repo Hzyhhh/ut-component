@@ -2,15 +2,27 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useState,
 } from 'react';
-import {FlatList, ListRenderItem} from 'react-native';
-import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import {ColumnsBase, UTableCommonItemBase, UTableMethods} from './type';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  ColumnsType,
+  DataSourceType,
+  UTableCommonItemBase,
+  UTableMethods,
+} from './type';
 import ItemRendered from './ItemRendered';
+import {StyleSheet, View} from 'react-native';
 
 export interface UTableProps<T extends UTableCommonItemBase> {
+  /**
+   * 表单配置定义
+   */
+  columns: ColumnsType<T>;
+  /**
+   * 当前票Id 存数据的主键
+   */
+  ticketId: string;
   wrapperComponentRef?: React.Ref<UTableMethods<T>>;
   persistKey?: string;
   /**
@@ -18,10 +30,6 @@ export interface UTableProps<T extends UTableCommonItemBase> {
    * 允许选择 -> 表单前面多个复选框
    */
   enableSelect?: boolean;
-  /**
-   * 定义表单字段
-   */
-  columns: ColumnsBase<T>[];
   /**
    * 表单主要信息
    */
@@ -37,25 +45,40 @@ export interface UTableProps<T extends UTableCommonItemBase> {
   /**
    * 受控模式
    */
-  value?: T[];
-  onChange?: (v: T[]) => void;
+  value?: {
+    [key: string]: DataSourceType<T>;
+  };
+  onChange?: (v: {[key: string]: T[]}) => void;
+
+  /**
+   * 外部触发事件
+   */
+  onTrigger?: (
+    type: string,
+    defaultParams: any,
+    instance: UTableMethods<T>,
+  ) => void;
 
   children?: React.ReactElement;
 }
 
 function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const {
+    ticketId,
     wrapperComponentRef,
     persistKey = 'UTable',
-    columns,
     value,
+    columns: column,
     onToast,
     header,
     footer,
+    onTrigger,
   } = props;
-  const {setItem, getItem} = useAsyncStorage(persistKey);
-  const [dataSource, setDataSource] = useState<T[]>([]);
-
+  // const {setItem, getItem} = useAsyncStorage(persistKey);
+  const [dataSource, setDataSource] = useState<{
+    [key: string]: DataSourceType<T>;
+  }>({});
+  const [columns, setColumns] = useState<ColumnsType<T>>({});
   const [UTableRef, setUTableRef] = useState<UTableMethods<T>>();
 
   useImperativeHandle(wrapperComponentRef, () => UTableRef!, [UTableRef]);
@@ -63,18 +86,49 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   /**
    *
    */
-  const a: T[] = useMemo(() => {
-    getItem((err, str) => {
+  const handleUpdateCurrentList = (key: string, item: T) => {
+    setDataSource(prevList => {
+      const list = prevList[key]?.list ?? [];
+      list.splice(
+        list.findIndex(i => i.id === item.id),
+        1,
+        item,
+      );
+      return {...prevList};
+    });
+  };
+
+  /**
+   *  获取离线数据
+   */
+  const handleCurrentOfflineList: (key: string) => T[] = key => {
+    const recoverMap = recoverOfflineData();
+    const payload = recoverMap.get(ticketId);
+    return payload?.[key]?.list ?? [];
+  };
+
+  const recoverOfflineData: () => Map<
+    string,
+    {[key: string]: DataSourceType<T>}
+  > = () => {
+    let map = new Map<string, {[key: string]: DataSourceType<T>}>();
+
+    AsyncStorage.getItem(persistKey, (err, str) => {
       if (err) {
         onToast?.(err.message);
+        return;
       }
       if (!str) {
         onToast?.(persistKey + ' 不存在缓存数据');
       }
-      return str ? JSON.parse(str) : [];
+      console.log('str', persistKey, str);
+
+      const parseData = str ? JSON.parse(str) : new Map();
+      console.log('parseData', parseData);
+      map = new Map(parseData);
     });
-    return [];
-  }, []);
+    return map;
+  };
 
   /**
    * 渲染表单主要信息
@@ -96,47 +150,65 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
     return <></>;
   }, [UTableRef]);
 
-  /**
-   * 渲染操作项
-   */
-  const renderItem: ListRenderItem<T> = useCallback(params => {
-    // const {item} = params;
-    return (
-      <ItemRendered
-        dataSource={dataSource}
-        column={columns}
-        instance={UTableRef}
-      />
-    );
-  }, []);
-
   useEffect(() => {
+    const coverMap = recoverOfflineData();
+    console.log(123, value);
+    setColumns(column);
     if (value) {
       setDataSource(value);
-    }
-  }, [value]);
 
-  useEffect(() => {
-    const payload = JSON.stringify(value);
-    setItem(payload);
-  }, [dataSource]);
+      coverMap.set(ticketId, value);
+      console.log('coverMap', JSON.stringify(Array.from(coverMap.entries())));
+
+      AsyncStorage.setItem(
+        persistKey,
+        JSON.stringify(Array.from(coverMap.entries())),
+      );
+      setTimeout(() => {
+        AsyncStorage.getItem(persistKey).then(val => {
+          console.log(val);
+        });
+      }, 300);
+    } else {
+      if (coverMap.get(ticketId)) {
+        console.log('coverMap.get(ticketId)', coverMap.get(ticketId));
+
+        setDataSource(coverMap.get(ticketId)!);
+      }
+    }
+  }, [value, column, ticketId]);
 
   // 数据变动时将钩子方法更新
   useEffect(() => {
     setUTableRef({
-      getList: () => dataSource,
+      getList: (key: string) => dataSource?.[key]?.list,
+      getCurrentOfflineList: handleCurrentOfflineList,
+      setItem: handleUpdateCurrentList,
+      trigger: (...params) => onTrigger?.(...params, UTableRef!),
     });
   }, [dataSource]);
 
   return (
-    <FlatList
-      data={dataSource}
-      renderItem={renderItem}
-      ListHeaderComponent={renderHeader}
-      ListFooterComponent={renderFooter}>
-      {props.children}
-    </FlatList>
+    <View style={styles.container}>
+      {renderHeader()}
+      {Object.keys(dataSource).map(i => {
+        return (
+          <ItemRendered
+            key={i}
+            instance={UTableRef}
+            title={dataSource[i].title}
+            dataSource={dataSource[i].list}
+            column={columns?.[i]}
+          />
+        );
+      })}
+      {renderFooter()}
+    </View>
   );
 }
 
 export default UTable;
+
+const styles = StyleSheet.create({
+  container: {flex: 1, paddingHorizontal: 16},
+});

@@ -45,14 +45,27 @@ export interface ColumnsBase<T extends UTableCommonItemBase> {
 }
 
 export interface UTableMethods<T> {
-  getList: () => T[];
+  getList: (key: string) => T[];
+  getCurrentOfflineList: (key: string) => T[];
+  setItem: (key: string, item: T) => void;
+  /**
+   *
+   */
+  trigger: (type: string, defaultParams: any) => void;
 }
 
 export interface ItemRenderedProps<T extends UTableCommonItemBase> {
+  loading?: boolean;
+  refreshTitle?: string;
   title?: string;
   dataSource: T[];
   column: ColumnsBase<T>[];
   instance?: UTableMethods<T>;
+
+  onRefresh?: Promise<() => void>;
+
+  TableHeaderComponent?: () => React.ReactElement;
+  TableFooterComponent?: () => React.ReactElement;
 }
 
 export type ElementCellRendered<T extends UTableCommonItemBase> = (
@@ -65,3 +78,18 @@ export type ElementTitleCellRendered<T extends UTableCommonItemBase> = (
   columnData: ColumnsBase<T>,
   index: number,
 ) => React.ReactElement;
+
+export interface DataSourceType<T extends UTableCommonItemBase> {
+  title?: string;
+  /**
+   * 定义表单列表
+   */
+  list: T[];
+}
+
+export interface ColumnsType<T extends UTableCommonItemBase> {
+  /**
+   * 定义多个表单字段
+   */
+  [key: string]: ColumnsBase<T>[];
+}
