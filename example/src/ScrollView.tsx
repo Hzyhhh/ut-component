@@ -4,58 +4,107 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  View,
   Button,
 } from 'react-native';
-import ItemRendered from './ItemRendered';
-import {
-  ColumnsBase,
+import UTable, {
+  DataSourceType,
   UTableCommonItemBase,
   UTableMethods,
 } from 'ut-component/dist/UTable';
+import {ColumnsType} from '../../dist/UTable/type';
 
-const value: UTableCommonItemBase[] = ['1', '2', '3', '4', '5'].map(
-  (i, idx) => ({
-    id: i,
-    sortId: idx,
-    isFinished: false,
-    isUploaded: false,
-  }),
-);
+const value: {
+  [key: string]: DataSourceType<UTableCommonItemBase>;
+} = {
+  aaa: {
+    list: ['1', '2', '3', '4', '5'].map((i, idx) => ({
+      id: i,
+      sortId: idx,
+      isFinished: false,
+      isUploaded: false,
+    })),
+  },
+  bbb: {
+    title: '123123123123122',
+    list: ['1', '2', '3', '4', '5'].map((i, idx) => ({
+      id: i,
+      sortId: idx,
+      isFinished: false,
+      isUploaded: false,
+    })),
+  },
+};
 
-const columns: ColumnsBase<UTableCommonItemBase>[] = [
-  {
-    dataIndex: 'id',
-    title: '序号',
-    width: 40,
-    align: 'center',
-  },
-  {
-    title: '操作内容',
-    dataIndex: 'sortId',
-    render: r => <Text>{r.sortId}</Text>,
-  },
-  {
-    title: 'asdfasdf',
-    dataIndex: 'isFinished',
-    align: 'center',
-    render: r => <Text>{r.isFinished ? '真的吗' : '假的吧'}</Text>,
-  },
-  {
-    title: '完成',
-    dataIndex: 'finish',
-    width: 60,
-    align: 'center',
-    render: (r, index, t) => (
-      <Button
-        title="点击"
-        onPress={() => {
-          console.log(r, index);
-        }}
-      />
-    ),
-  },
-];
+const columns: ColumnsType<UTableCommonItemBase> = {
+  aaa: [
+    {
+      dataIndex: 'id',
+      title: '序号',
+      width: 40,
+      align: 'center',
+    },
+    {
+      title: '操作内容',
+      dataIndex: 'sortId',
+      render: r => <Text>{r.sortId}</Text>,
+    },
+    {
+      title: 'asdfasdf',
+      dataIndex: 'isFinished',
+      align: 'center',
+      render: r => <Text>{r.isFinished ? '真的吗' : '假的吧'}</Text>,
+    },
+    {
+      title: '完成',
+      dataIndex: 'finish',
+      width: 60,
+      align: 'center',
+      render: (r, index, t) => (
+        <Button
+          title="点击"
+          onPress={() => {
+            console.log(r, index);
+          }}
+        />
+      ),
+    },
+  ],
+  bbb: [
+    {
+      dataIndex: 'id',
+      title: '序号',
+      width: 40,
+      align: 'center',
+    },
+    {
+      title: '操作内容',
+      dataIndex: 'sortId',
+      render: r => <Text>{r.sortId}</Text>,
+    },
+    {
+      title: 'asdfasdf',
+      dataIndex: 'isFinished',
+      align: 'center',
+      render: r => <Text>{r.isFinished ? '真的吗' : '假的吧'}</Text>,
+    },
+    {
+      title: '完成',
+      dataIndex: 'finish',
+      width: 60,
+      align: 'center',
+      render: (r, index, t) => (
+        <Button
+          title="点击"
+          onPress={() => {
+            const updateItem = t.setItem('bbb', {...r, sortId: 5});
+            const list = t.getList('bbb');
+            console.log(list, updateItem);
+          }}
+        />
+      ),
+    },
+  ],
+};
 
 interface HeaderRenderedProps extends UTableCommonItemBase {
   a: string;
@@ -71,10 +120,13 @@ const FooterRendered = (table?: UTableMethods<HeaderRenderedProps>) => {
 const ScrollViewScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      {HeaderRendered()}
-      <ItemRendered title="操作前风险分析及控制措施" dataSource={value} column={columns} />
-      <ItemRendered title="操作票操作项" dataSource={value} column={columns} />
-      {FooterRendered()}
+      <UTable
+        ticketId="123"
+        columns={columns}
+        // value={value}
+        header={HeaderRendered}
+        footer={FooterRendered}
+      />
     </SafeAreaView>
   );
 };
