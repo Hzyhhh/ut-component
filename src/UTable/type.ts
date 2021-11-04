@@ -47,7 +47,7 @@ export interface ColumnsBase<T extends UTableCommonItemBase> {
 export interface UTableMethods<T> {
   getList: (key: string) => T[];
   getCurrentOfflineList: (key: string) => T[];
-  setItem: (key: string, item: T) => void;
+  setItem: (key: string, item: T) => T;
   /**
    *
    */

@@ -86,7 +86,7 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   /**
    *
    */
-  const handleUpdateCurrentList = (key: string, item: T) => {
+  const handleUpdateCurrentList = (key: string, item: T): T => {
     setDataSource(prevList => {
       const list = prevList[key]?.list ?? [];
       list.splice(
@@ -94,8 +94,25 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
         1,
         item,
       );
+      handleSetCurrentOfflineItem({...prevList});
       return {...prevList};
     });
+    return item;
+  };
+
+  /**
+   * 更新所有离线数据
+   */
+  const handleSetCurrentOfflineItem = (item: {
+    [key: string]: DataSourceType<T>;
+  }) => {
+    const recoverMap = recoverOfflineData();
+    recoverMap.set(ticketId, item);
+
+    AsyncStorage.setItem(
+      persistKey,
+      JSON.stringify(Array.from(recoverMap.entries())),
+    );
   };
 
   /**
@@ -152,27 +169,13 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
 
   useEffect(() => {
     const coverMap = recoverOfflineData();
-    console.log(123, value);
     setColumns(column);
     if (value) {
       setDataSource(value);
 
-      coverMap.set(ticketId, value);
-      console.log('coverMap', JSON.stringify(Array.from(coverMap.entries())));
-
-      AsyncStorage.setItem(
-        persistKey,
-        JSON.stringify(Array.from(coverMap.entries())),
-      );
-      setTimeout(() => {
-        AsyncStorage.getItem(persistKey).then(val => {
-          console.log(val);
-        });
-      }, 300);
+      handleSetCurrentOfflineItem(value);
     } else {
       if (coverMap.get(ticketId)) {
-        console.log('coverMap.get(ticketId)', coverMap.get(ticketId));
-
         setDataSource(coverMap.get(ticketId)!);
       }
     }

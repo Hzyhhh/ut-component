@@ -10,7 +10,7 @@
     "reactjs"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf ./dist && tsc",
     "clean": "rimraf node_modules",
     "start": "react-scripts start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
