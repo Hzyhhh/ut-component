@@ -833,13 +833,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@react-native-async-storage/async-storage@^1.15.9":
-  version "1.15.11"
-  resolved "https://registry.npmmirror.com/@react-native-async-storage/async-storage/download/@react-native-async-storage/async-storage-1.15.11.tgz#da625b906529076414c32fd337d813b565149858"
-  integrity sha1-2mJbkGUpB2QUwy/TN9gTtWUUmFg=
-  dependencies:
-    merge-options "^3.0.4"
-
 "@react-native-community/eslint-config@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-config/-/eslint-config-2.0.0.tgz#35dcc529a274803fc4e0a6b3d6c274551fb91774"
@@ -1724,11 +1717,6 @@ is-number-object@^1.0.4:
   resolved "https://registry.yarnpkg.com/is-number-object/-/is-number-object-1.0.4.tgz#36ac95e741cf18b283fc1ddf5e83da798e3ec197"
   integrity sha512-zohwelOAur+5uXtk8O3GPQ1eAcu4ZX3UwxQhUlfFFMNpUd83gXgjbhJh6HmB6LUNV/ieOLQuDwJO3dWJosUeMw==
 
-is-plain-obj@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npm.taobao.org/is-plain-obj/download/is-plain-obj-2.1.0.tgz?cache=0&sync_timestamp=1618600489644&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fis-plain-obj%2Fdownload%2Fis-plain-obj-2.1.0.tgz#45e42e37fccf1f40da8e5f76ee21515840c09287"
-  integrity sha1-ReQuN/zPH0Dajl927iFRWEDAkoc=
-
 is-regex@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.1.2.tgz#81c8ebde4db142f2cf1c53fc86d6a45788266251"
@@ -1853,13 +1841,6 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
-
-merge-options@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.nlark.com/merge-options/download/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
-  integrity sha1-hHCcKqKkskwZgfZsF5/lVlzG27c=
-  dependencies:
-    is-plain-obj "^2.1.0"
 
 metro-react-native-babel-preset@^0.66.0:
   version "0.66.0"

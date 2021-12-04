@@ -28,7 +28,6 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@ui-kitten/components": "^5.1.1",
     "react": "17.0.1",
     "react-native": "0.64.0"
   },
