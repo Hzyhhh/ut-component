@@ -834,9 +834,9 @@
     strip-json-comments "^3.1.1"
 
 "@react-native-async-storage/async-storage@^1.15.9":
-  version "1.15.9"
-  resolved "https://registry.npmmirror.com/@react-native-async-storage/async-storage/download/@react-native-async-storage/async-storage-1.15.9.tgz#744ecd566f108e86b6b59e617c23fdb4b8d53358"
-  integrity sha1-dE7NVm8Qjoa2tZ5hfCP9tLjVM1g=
+  version "1.15.11"
+  resolved "https://registry.npmmirror.com/@react-native-async-storage/async-storage/download/@react-native-async-storage/async-storage-1.15.11.tgz#da625b906529076414c32fd337d813b565149858"
+  integrity sha1-2mJbkGUpB2QUwy/TN9gTtWUUmFg=
   dependencies:
     merge-options "^3.0.4"
 
