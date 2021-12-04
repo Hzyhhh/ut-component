@@ -1,47 +1,15 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  Dimensions,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import {Cell, Row, Table, TableWrapper} from '../table-component';
-import {
-  ElementCellRendered,
-  ElementTitleCellRendered,
-  ItemRenderedProps,
-  UTableCommonItemBase,
-} from '../UTable';
+import React, {useMemo} from 'react'
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native'
+import {Cell, Row, Table, TableWrapper} from '../table-component'
+import {ElementCellRendered, ElementTitleCellRendered, ItemRenderedProps, UTableCommonItemBase} from '../UTable'
 
-function ItemRendered<T extends UTableCommonItemBase>(
-  props: ItemRenderedProps<T>,
-) {
-  const {
-    title,
-    refreshTitle = '刷新中',
-    dataSource,
-    column,
-    instance: ref,
-    loading = false,
-    onRefresh,
-  } = props;
-  const [refreshing, setRefreshing] = useState(false);
-
-  const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
-    (await onRefresh)?.();
-    setRefreshing(false);
-  }, []);
+function ItemRendered<T extends UTableCommonItemBase>(props: ItemRenderedProps<T>) {
+  const {title, dataSource, column, instance: ref} = props
 
   /**
    * 表单头部渲染
    */
-  const renderElementTitleCell: ElementTitleCellRendered<T> = (
-    columnData,
-    index,
-  ) => {
+  const renderElementTitleCell: ElementTitleCellRendered<T> = (columnData, index) => {
     return (
       <View style={[styles.titleCellWrapper]}>
         {columnData.title ? (
@@ -50,28 +18,21 @@ function ItemRendered<T extends UTableCommonItemBase>(
           columnData.render?.({} as T, index, ref)
         )}
       </View>
-    );
-  };
+    )
+  }
 
   /**
    * 表单项渲染
    */
-  const renderElementCell: ElementCellRendered<T> = (
-    columnData,
-    columnConfig,
-    index,
-  ) => {
+  const renderElementCell: ElementCellRendered<T> = (columnData, columnConfig, index) => {
     return (
       <View
         style={[
           styles.cellWrapper,
           {
+            padding: 8,
             alignItems:
-              columnConfig?.align === 'center'
-                ? 'center'
-                : columnConfig?.align === 'right'
-                ? 'flex-end'
-                : 'flex-start',
+              columnConfig?.align === 'center' ? 'center' : columnConfig?.align === 'right' ? 'flex-end' : 'flex-start',
           },
         ]}>
         {columnConfig.render ? (
@@ -80,62 +41,41 @@ function ItemRendered<T extends UTableCommonItemBase>(
           <Text>{columnData[columnConfig.dataIndex]}</Text>
         )}
       </View>
-    );
-  };
+    )
+  }
 
-  const isHorizontalScroll: boolean = useMemo(
-    () =>
-      column.reduce((prev, curr) => prev + (curr?.width ?? 40), 0) >
-      Dimensions.get('window').width,
-    [column],
-  );
-
-  useEffect(() => {
-    setRefreshing(loading);
-  }, [loading]);
+  const isHorizontalScroll: boolean = useMemo(() => {
+    return column.reduce((prev, curr) => prev + (curr?.width ?? 60), 0) > Dimensions.get('window').width
+  }, [column])
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          title={refreshTitle}
-          onRefresh={handleRefresh}
-        />
-      }
-      horizontal={isHorizontalScroll}>
+    <ScrollView horizontal={isHorizontalScroll}>
       {/* 表单渲染 */}
       <Table
         borderStyle={{
           borderWidth: 1,
           borderColor: '#ccc',
         }}>
-        {!!title ? (
+        {!!title && (
           <TableWrapper style={[styles.row, styles.formBackground]}>
             {/* 标题 */}
-            <Row
-              style={styles.formTitleWrapper}
-              textStyle={styles.formTitle}
-              data={[title]}
-            />
+            <Row style={styles.formTitleWrapper} textStyle={styles.formTitle} data={[title]} />
           </TableWrapper>
-        ) : (
-          <TableWrapper />
         )}
-        <TableWrapper style={[styles.row, styles.formBackground]}>
-          {/* 表头 */}
-          {column.map((rowData, index) => {
-            return (
-              <Cell
-                key={rowData.dataIndex}
-                width={rowData.width}
-                data={renderElementTitleCell(rowData, index)}
-              />
-            );
-          })}
-        </TableWrapper>
+
+        {column.every((i) => !!i.title) && (
+          <TableWrapper style={[styles.row, styles.formBackground]}>
+            {/* 表头 */}
+            {column.map((rowData, index) => {
+              return (
+                <Cell key={rowData.dataIndex} width={rowData.width} data={renderElementTitleCell(rowData, index)} />
+              )
+            })}
+          </TableWrapper>
+        )}
+
         {/* 表格 */}
-        {dataSource.map((rowData, rowIndex) => (
+        {dataSource?.map((rowData, rowIndex) => (
           <TableWrapper key={rowData.id} style={styles.row}>
             {/* 表项 */}
             {column.map((colConfig, index) => {
@@ -145,16 +85,22 @@ function ItemRendered<T extends UTableCommonItemBase>(
                   width={colConfig.width}
                   data={renderElementCell(rowData, colConfig, index)}
                 />
-              );
+              )
             })}
           </TableWrapper>
         ))}
+        {/* 这里规定是常规表单项(有表头、有标题)没数据的情况才显示暂无数据 */}
+        {!dataSource?.length && !!title && column.every((i) => !!i.title) && (
+          <TableWrapper style={styles.row}>
+            <Row style={styles.formTitleWrapper} textStyle={styles.formTitle} data={['暂无数据']} />
+          </TableWrapper>
+        )}
       </Table>
     </ScrollView>
-  );
+  )
 }
 
-export default ItemRendered;
+export default ItemRendered
 
 const styles = StyleSheet.create({
   container: {flex: 1, paddingHorizontal: 16},
@@ -183,4 +129,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     fontSize: 8,
   },
-});
+})
