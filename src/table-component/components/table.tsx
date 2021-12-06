@@ -1,25 +1,28 @@
 // @ts-nocheck
 import React, {Component} from 'react';
-import {StyleProp, StyleSheetProperties, TextStyle, View, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheetProperties, View, ViewStyle} from 'react-native';
 
 export class Table extends Component<
-  Partial<{style: StyleSheetProperties; borderStyle: TextStyle}>
+  Partial<{style: StyleSheetProperties; borderStyle: ViewStyle}>
 > {
   _renderChildren(props) {
-    return React.Children.map(props.children, child =>
-      React.cloneElement(
-        child,
-        props.borderStyle && child.type.displayName !== 'ScrollView'
-          ? {borderStyle: props.borderStyle}
-          : {},
-      ),
+    return React.Children.map(
+      props.children,
+      child =>
+        child &&
+        React.cloneElement(
+          child,
+          props.borderStyle && child?.type.displayName !== 'ScrollView'
+            ? {borderStyle: props.borderStyle}
+            : {},
+        ),
     );
   }
 
   render() {
     const {borderStyle} = this.props;
     const borderLeftWidth = (borderStyle && borderStyle.borderWidth) || 0;
-    const borderBottomWidth = borderLeftWidth;
+    // const borderBottomWidth = borderLeftWidth
     const borderColor = (borderStyle && borderStyle.borderColor) || '#000';
 
     return (
@@ -28,7 +31,7 @@ export class Table extends Component<
           this.props.style,
           {
             borderLeftWidth,
-            borderBottomWidth,
+            // borderBottomWidth,
             borderColor,
           },
         ]}>
