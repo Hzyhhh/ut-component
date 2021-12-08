@@ -1,15 +1,25 @@
-import React, {useMemo} from 'react'
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native'
-import {Cell, Row, Table, TableWrapper} from '../table-component'
-import {ElementCellRendered, ElementTitleCellRendered, ItemRenderedProps, UTableCommonItemBase} from '../UTable'
+import React, {useMemo} from 'react';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Cell, Row, Table, TableWrapper} from '../table-component';
+import {
+  ElementCellRendered,
+  ElementTitleCellRendered,
+  ItemRenderedProps,
+  UTableCommonItemBase,
+} from '../UTable';
 
-function ItemRendered<T extends UTableCommonItemBase>(props: ItemRenderedProps<T>) {
-  const {title, dataSource, column, instance: ref} = props
+function ItemRendered<T extends UTableCommonItemBase>(
+  props: ItemRenderedProps<T>,
+) {
+  const {title, dataSource, column, instance: ref} = props;
 
   /**
    * 表单头部渲染
    */
-  const renderElementTitleCell: ElementTitleCellRendered<T> = (columnData, index) => {
+  const renderElementTitleCell: ElementTitleCellRendered<T> = (
+    columnData,
+    index,
+  ) => {
     return (
       <View style={[styles.titleCellWrapper]}>
         {columnData.title ? (
@@ -18,21 +28,30 @@ function ItemRendered<T extends UTableCommonItemBase>(props: ItemRenderedProps<T
           columnData.render?.({} as T, index, ref)
         )}
       </View>
-    )
-  }
+    );
+  };
 
   /**
    * 表单项渲染
    */
-  const renderElementCell: ElementCellRendered<T> = (columnData, columnConfig, index) => {
+  const renderElementCell: ElementCellRendered<T> = (
+    columnData,
+    columnConfig,
+    index,
+  ) => {
     return (
       <View
         style={[
           styles.cellWrapper,
           {
-            padding: 8,
+            padding: columnConfig?.padding ?? 8,
+            paddingHorizontal: columnConfig?.padding,
             alignItems:
-              columnConfig?.align === 'center' ? 'center' : columnConfig?.align === 'right' ? 'flex-end' : 'flex-start',
+              columnConfig?.align === 'center'
+                ? 'center'
+                : columnConfig?.align === 'right'
+                ? 'flex-end'
+                : 'flex-start',
           },
         ]}>
         {columnConfig.render ? (
@@ -41,12 +60,15 @@ function ItemRendered<T extends UTableCommonItemBase>(props: ItemRenderedProps<T
           <Text>{columnData[columnConfig.dataIndex]}</Text>
         )}
       </View>
-    )
-  }
+    );
+  };
 
   const isHorizontalScroll: boolean = useMemo(() => {
-    return column.reduce((prev, curr) => prev + (curr?.width ?? 60), 0) > Dimensions.get('window').width
-  }, [column])
+    return (
+      column.reduce((prev, curr) => prev + (curr?.width ?? 60), 0) >
+      Dimensions.get('window').width
+    );
+  }, [column]);
 
   return (
     <ScrollView horizontal={isHorizontalScroll}>
@@ -59,17 +81,25 @@ function ItemRendered<T extends UTableCommonItemBase>(props: ItemRenderedProps<T
         {!!title && (
           <TableWrapper style={[styles.row, styles.formBackground]}>
             {/* 标题 */}
-            <Row style={styles.formTitleWrapper} textStyle={styles.formTitle} data={[title]} />
+            <Row
+              style={styles.formTitleWrapper}
+              textStyle={styles.formTitle}
+              data={[title]}
+            />
           </TableWrapper>
         )}
 
-        {column.every((i) => !!i.title) && (
+        {column.every(i => !!i.title) && (
           <TableWrapper style={[styles.row, styles.formBackground]}>
             {/* 表头 */}
             {column.map((rowData, index) => {
               return (
-                <Cell key={rowData.dataIndex} width={rowData.width} data={renderElementTitleCell(rowData, index)} />
-              )
+                <Cell
+                  key={rowData.dataIndex}
+                  width={rowData.width}
+                  data={renderElementTitleCell(rowData, index)}
+                />
+              );
             })}
           </TableWrapper>
         )}
@@ -85,22 +115,26 @@ function ItemRendered<T extends UTableCommonItemBase>(props: ItemRenderedProps<T
                   width={colConfig.width}
                   data={renderElementCell(rowData, colConfig, index)}
                 />
-              )
+              );
             })}
           </TableWrapper>
         ))}
         {/* 这里规定是常规表单项(有表头、有标题)没数据的情况才显示暂无数据 */}
-        {!dataSource?.length && !!title && column.every((i) => !!i.title) && (
+        {!dataSource?.length && !!title && column.every(i => !!i.title) && (
           <TableWrapper style={styles.row}>
-            <Row style={styles.formTitleWrapper} textStyle={styles.formTitle} data={['暂无数据']} />
+            <Row
+              style={styles.formTitleWrapper}
+              textStyle={styles.formTitle}
+              data={['暂无数据']}
+            />
           </TableWrapper>
         )}
       </Table>
     </ScrollView>
-  )
+  );
 }
 
-export default ItemRendered
+export default ItemRendered;
 
 const styles = StyleSheet.create({
   container: {flex: 1, paddingHorizontal: 16},
@@ -129,4 +163,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     fontSize: 8,
   },
-})
+});
