@@ -1,7 +1,10 @@
 import UTable, {UTableProps} from './UTable';
+import RightActionsRendered, {
+  SelfRightActionsRenderedProps,
+} from './RightActionsRendered';
 
 // Components Props exports
-export type {UTableProps};
+export type {UTableProps, SelfRightActionsRenderedProps};
 
 // Components exports
-export {UTable};
+export {UTable, RightActionsRendered};
