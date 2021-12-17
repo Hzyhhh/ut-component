@@ -19,10 +19,10 @@ $ yarn add ut-component
 ## 基本用法
 
 ```jsx
-import WhiteSpace from 'components/WhiteSpace';
-import React from 'react'; 
-import {Button} from 'react-native';
-import {UTable} from 'ut-component';
+import WhiteSpace from 'components/WhiteSpace'
+import React from 'react'
+import {Button} from 'react-native'
+import {UTable} from 'ut-component'
 
 const columns = {
   key1: [
@@ -48,22 +48,22 @@ const columns = {
       render: r => <Button onPress={() => console.log(r)} title="确定" />,
     },
   ],
-};
+}
 
 const value = {
   key1: {
     title: '人物介绍',
     list: [{sortId: 1, name: '张三', content: '喜欢唱跳rap'}],
   },
-};
+}
 
 const HeaderRendered = () => {
-  return <WhiteSpace size="bg" />;
-};
+  return <WhiteSpace size="bg" />
+}
 
 const FooterRendered = () => {
-  return <WhiteSpace size="bg" />;
-};
+  return <WhiteSpace size="bg" />
+}
 
 const AppScreen = () => {
   return (
@@ -76,18 +76,18 @@ const AppScreen = () => {
       />
       <Text></Text>
     </>
-  );
-};
+  )
+}
 
-export default AppScreen;
+export default AppScreen
 ```
 
-![](./images/basic1.png)
+![](/.github/images/basic1.png)
 
 ## 表单合并
 
 查看一些表单复杂的用法
 
-![](./images/basic2.png)
+![](/.github/images/basic2.png)
 
-![](./images/basic3.png)
+![](/.github/images/basic3.png)
