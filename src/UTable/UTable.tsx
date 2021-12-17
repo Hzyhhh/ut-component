@@ -1,10 +1,28 @@
-import React, {useCallback, useEffect, useImperativeHandle, useState} from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
 // import AsyncStorage from '@react-native-async-storage/async-storage'
-import {ColumnsType, DataSourceType, UTableCommonItemBase, UTableMethods} from './type'
+import {
+  ColumnsType,
+  DataSourceType,
+  UTableCommonItemBase,
+  UTableMethods,
+} from './type'
 import ItemRendered from './ItemRendered'
-import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 
 export interface UTableProps<T extends UTableCommonItemBase> {
+  /**
+   * 边框宽度
+   */
+  borderWidth?: number
+  /**
+   * 边框颜色
+   */
+  borderColor?: string
   /**
    * 刷新标题
    */
@@ -50,18 +68,24 @@ export interface UTableProps<T extends UTableCommonItemBase> {
   value?: {
     [key: string]: DataSourceType<T>
   }
-  onChange?: (v: {[key: string]: T[]}) => void
+  onChange?: (v: { [key: string]: T[] }) => void
 
   /**
    * 外部触发事件
    */
-  onTrigger?: (type: string, defaultParams: any, instance: UTableMethods<T>) => void
+  onTrigger?: (
+    type: string,
+    defaultParams: any,
+    instance: UTableMethods<T>,
+  ) => void
 
   children?: React.ReactElement
 }
 
 function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const {
+    borderWidth,
+    borderColor,
     loading = false,
     refreshTitle = 'refreshTitle',
     ticketId,
@@ -96,15 +120,15 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
    *
    */
   const handleUpdateCurrentList = (key: string, item: T): T => {
-    setDataSource((prevList) => {
+    setDataSource(prevList => {
       const list = prevList[key]?.list ?? []
       list.splice(
-        list.findIndex((i) => i.id === item.id),
+        list.findIndex(i => i.id === item.id),
         1,
         item,
       )
       // handleSetCurrentOfflineItem({...prevList})
-      return {...prevList}
+      return { ...prevList }
     })
     return item
   }
@@ -163,9 +187,18 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
    */
   const renderFooter: () => React.ReactElement = useCallback(() => {
     if (footer) {
-      return <View style={{borderTopWidth: 1, borderTopColor: '#ccc'}}>{footer(UTableRef)}</View>
+      return (
+        <View
+          style={{ borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc' }}>
+          {footer(UTableRef)}
+        </View>
+      )
     }
-    return <View style={{borderTopWidth: 1, borderTopColor: '#ccc'}} />
+    return (
+      <View
+        style={{ borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc' }}
+      />
+    )
   }, [UTableRef])
 
   useEffect(() => {
@@ -199,14 +232,22 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
 
   return (
     <ScrollView
-      refreshControl={<RefreshControl refreshing={refreshing} title={refreshTitle} onRefresh={handleRefresh} />}>
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          title={refreshTitle}
+          onRefresh={handleRefresh}
+        />
+      }>
       <View style={styles.container}>
         {renderHeader()}
-        <View style={{marginTop: -1}} />
-        {Object.keys(dataSource).map((i) => {
+        <View style={{ marginTop: -1 }} />
+        {Object.keys(dataSource).map(i => {
           return (
             <ItemRendered
               key={i}
+              borderWidth={borderWidth}
+              borderColor={borderColor}
               instance={UTableRef}
               title={dataSource[i]?.title}
               dataSource={dataSource[i]?.list}
@@ -225,5 +266,5 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
 export default UTable
 
 const styles = StyleSheet.create({
-  container: {flex: 1, paddingHorizontal: 12},
+  container: { flex: 1, paddingHorizontal: 12 },
 })

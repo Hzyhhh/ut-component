@@ -11,7 +11,14 @@ import {
 function ItemRendered<T extends UTableCommonItemBase>(
   props: ItemRenderedProps<T>,
 ) {
-  const {title, dataSource, column, instance: ref} = props;
+  const {
+    title,
+    dataSource,
+    column,
+    borderWidth = 0.5,
+    borderColor = '#ccc',
+    instance: ref,
+  } = props;
 
   /**
    * 表单头部渲染
@@ -75,8 +82,8 @@ function ItemRendered<T extends UTableCommonItemBase>(
       {/* 表单渲染 */}
       <Table
         borderStyle={{
-          borderWidth: 1,
-          borderColor: '#ccc',
+          borderWidth,
+          borderColor,
         }}>
         {!!title && (
           <TableWrapper style={[styles.row, styles.formBackground]}>

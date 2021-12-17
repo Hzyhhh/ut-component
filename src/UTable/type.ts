@@ -63,6 +63,8 @@ export interface ItemRenderedProps<T extends UTableCommonItemBase> {
   dataSource: T[];
   column: ColumnsBase<T>[];
   instance?: UTableMethods<T>;
+  borderWidth?: number;
+  borderColor?: string;
 
   header?: ColumnsBase<T>[];
   footer?: ColumnsBase<T>[];
