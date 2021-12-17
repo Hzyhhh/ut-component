@@ -1,18 +1,35 @@
 {
   "name": "ut-component",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "UT Business Component",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
+  "author": "hzy",
+  "files": [
+    "dist/"
+  ],
   "keywords": [
     "react-native",
     "reactjs"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://git.utapp.cn/js-group/ut-component"
+  },
+  "bugs": {
+    "url": "https://git.utapp.cn/js-group/ut-component/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "rimraf ./dist && tsc",
     "clean": "rimraf node_modules",
     "start": "react-scripts start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -22,7 +39,9 @@
     "@types/react-native": "^0.64.0",
     "@ui-kitten/components": "^5.1.1",
     "eslint": "^7.14.0",
+    "husky": "^7.0.4",
     "metro-react-native-babel-preset": "^0.66.0",
+    "pretty-quick": "^3.1.2",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "rimraf": "^3.0.2",
