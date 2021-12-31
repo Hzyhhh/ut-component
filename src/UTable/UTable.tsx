@@ -12,7 +12,7 @@ import {
   UTableMethods,
 } from './type'
 import ItemRendered from './ItemRendered'
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
+import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native'
 
 export interface UTableProps<T extends UTableCommonItemBase> {
   /**
@@ -68,7 +68,7 @@ export interface UTableProps<T extends UTableCommonItemBase> {
   value?: {
     [key: string]: DataSourceType<T>
   }
-  onChange?: (v: { [key: string]: T[] }) => void
+  onChange?: (v: {[key: string]: T[]}) => void
 
   /**
    * 外部触发事件
@@ -128,7 +128,7 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
         item,
       )
       // handleSetCurrentOfflineItem({...prevList})
-      return { ...prevList }
+      return {...prevList}
     })
     return item
   }
@@ -189,14 +189,14 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
     if (footer) {
       return (
         <View
-          style={{ borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc' }}>
+          style={{borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc'}}>
           {footer(UTableRef)}
         </View>
       )
     }
     return (
       <View
-        style={{ borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc' }}
+        style={{borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc'}}
       />
     )
   }, [UTableRef])
@@ -241,7 +241,7 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
       }>
       <View style={styles.container}>
         {renderHeader()}
-        <View style={{ marginTop: -1 }} />
+        <View style={{marginTop: -1}} />
         {Object.keys(dataSource).map(i => {
           return (
             <ItemRendered
@@ -266,5 +266,5 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
 export default UTable
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 12 },
+  container: {flex: 1, paddingHorizontal: 12},
 })
