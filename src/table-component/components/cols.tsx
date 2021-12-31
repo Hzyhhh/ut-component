@@ -1,17 +1,17 @@
 // @ts-nocheck
-import React, {Component} from 'react';
-import {View, StyleSheet, StyleSheetProperties, TextStyle} from 'react-native';
-import {Cell} from './cell';
-import {sum} from '../utils';
+import React, {Component} from 'react'
+import {View, StyleSheet, StyleSheetProperties, TextStyle} from 'react-native'
+import {Cell} from './cell'
+import {sum} from '../utils'
 
 export class Col extends Component<
   Partial<{
-    data;
-    heightArr;
-    flex;
-    width: number;
-    style: StyleSheetProperties;
-    textStyle: TextStyle;
+    data
+    heightArr
+    flex
+    width: number
+    style: StyleSheetProperties
+    textStyle: TextStyle
   }>
 > {
   render() {
@@ -23,7 +23,7 @@ export class Col extends Component<
       flex,
       textStyle,
       ...props
-    } = this.props;
+    } = this.props
 
     return data ? (
       <View
@@ -33,7 +33,7 @@ export class Col extends Component<
           style,
         ]}>
         {data.map((item, i) => {
-          const height = heightArr && heightArr[i];
+          const height = heightArr && heightArr[i]
           return (
             <Cell
               key={i}
@@ -43,22 +43,22 @@ export class Col extends Component<
               textStyle={textStyle}
               {...props}
             />
-          );
+          )
         })}
       </View>
-    ) : null;
+    ) : null
   }
 }
 
 export class Cols extends Component<
   Partial<{
-    data;
-    heightArr;
-    flex;
-    widthArr;
-    flexArr;
-    style: StyleSheetProperties;
-    textStyle: TextStyle;
+    data
+    heightArr
+    flex
+    widthArr
+    flexArr
+    style: StyleSheetProperties
+    textStyle: TextStyle
   }>
 > {
   render() {
@@ -70,14 +70,14 @@ export class Cols extends Component<
       flexArr,
       textStyle,
       ...props
-    } = this.props;
-    let width = widthArr ? sum(widthArr) : 0;
+    } = this.props
+    let width = widthArr ? sum(widthArr) : 0
 
     return data ? (
       <View style={[styles.cols, width && {width}]}>
         {data.map((item, i) => {
-          const flex = flexArr && flexArr[i];
-          const wth = widthArr && widthArr[i];
+          const flex = flexArr && flexArr[i]
+          const wth = widthArr && widthArr[i]
           return (
             <Col
               key={i}
@@ -89,13 +89,13 @@ export class Cols extends Component<
               textStyle={textStyle}
               {...props}
             />
-          );
+          )
         })}
       </View>
-    ) : null;
+    ) : null
   }
 }
 
 const styles = StyleSheet.create({
   cols: {flexDirection: 'row'},
-});
+})

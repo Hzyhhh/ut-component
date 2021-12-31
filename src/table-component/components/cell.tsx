@@ -1,23 +1,17 @@
 // @ts-nocheck
 
-import React, {Component} from 'react';
-import {
-  View,
-  StyleSheetProperties,
-  Text,
-  StyleSheet,
-  TextStyle,
-} from 'react-native';
+import React, {Component} from 'react'
+import {View, Text, StyleSheet, ViewStyle, TextStyle} from 'react-native'
 
 export class Cell extends Component<
   Partial<{
-    data;
-    width;
-    height;
-    flex;
-    style: StyleSheetProperties;
-    textStyle: TextStyle;
-    borderStyle: TextStyle;
+    data
+    width
+    height
+    flex
+    style: ViewStyle
+    textStyle: TextStyle
+    borderStyle: TextStyle
   }>
 > {
   render() {
@@ -30,17 +24,17 @@ export class Cell extends Component<
       textStyle,
       borderStyle,
       ...props
-    } = this.props;
+    } = this.props
     const textDom = React.isValidElement(data) ? (
       data
     ) : (
       <Text style={[textStyle, styles.text]} {...props}>
         {data}
       </Text>
-    );
-    const borderTopWidth = (borderStyle && borderStyle.borderWidth) || 0;
-    const borderRightWidth = borderTopWidth;
-    const borderColor = (borderStyle && borderStyle.borderColor) || '#000';
+    )
+    const borderTopWidth = (borderStyle && borderStyle.borderWidth) || 0
+    const borderRightWidth = borderTopWidth
+    const borderColor = (borderStyle && borderStyle.borderColor) || '#000'
 
     return (
       <View
@@ -54,16 +48,16 @@ export class Cell extends Component<
           width && {width},
           height && {height},
           flex && {flex},
-          !width && !flex && !height && !style && {flex: 1},
+          !width && !flex && !height && {flex: 1},
           style,
         ]}>
         {textDom}
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   cell: {justifyContent: 'center'},
   text: {backgroundColor: 'transparent'},
-});
+})

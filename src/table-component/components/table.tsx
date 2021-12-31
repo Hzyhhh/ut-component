@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React, {Component} from 'react';
-import {StyleProp, StyleSheetProperties, View, ViewStyle} from 'react-native';
+import React, {Component} from 'react'
+import {StyleProp, StyleSheetProperties, View, ViewStyle} from 'react-native'
 
 export class Table extends Component<
   Partial<{style: StyleSheetProperties; borderStyle: ViewStyle}>
@@ -16,14 +16,14 @@ export class Table extends Component<
             ? {borderStyle: props.borderStyle}
             : {},
         ),
-    );
+    )
   }
 
   render() {
-    const {borderStyle} = this.props;
-    const borderLeftWidth = (borderStyle && borderStyle.borderWidth) || 0;
+    const {borderStyle} = this.props
+    const borderLeftWidth = (borderStyle && borderStyle.borderWidth) || 0
     // const borderBottomWidth = borderLeftWidth
-    const borderColor = (borderStyle && borderStyle.borderColor) || '#000';
+    const borderColor = (borderStyle && borderStyle.borderColor) || '#000'
 
     return (
       <View
@@ -37,7 +37,7 @@ export class Table extends Component<
         ]}>
         {this._renderChildren(this.props)}
       </View>
-    );
+    )
   }
 }
 
@@ -50,11 +50,11 @@ export class TableWrapper extends Component<
         child,
         props.borderStyle ? {borderStyle: props.borderStyle} : {},
       ),
-    );
+    )
   }
 
   render() {
-    const {style} = this.props;
-    return <View style={style}>{this._renderChildren(this.props)}</View>;
+    const {style} = this.props
+    return <View style={style}>{this._renderChildren(this.props)}</View>
   }
 }
