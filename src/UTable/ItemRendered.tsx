@@ -1,12 +1,12 @@
-import React, {useMemo} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Cell, Row, Table, TableWrapper} from '../table-component';
+import React, {useMemo} from 'react'
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native'
+import {Cell, Row, Table, TableWrapper} from '../table-component'
 import {
   ElementCellRendered,
   ElementTitleCellRendered,
   ItemRenderedProps,
   UTableCommonItemBase,
-} from '../UTable';
+} from '../UTable'
 
 function ItemRendered<T extends UTableCommonItemBase>(
   props: ItemRenderedProps<T>,
@@ -18,7 +18,7 @@ function ItemRendered<T extends UTableCommonItemBase>(
     borderWidth = 0.5,
     borderColor = '#ccc',
     instance: ref,
-  } = props;
+  } = props
 
   /**
    * 表单头部渲染
@@ -35,8 +35,8 @@ function ItemRendered<T extends UTableCommonItemBase>(
           columnData.render?.({} as T, index, ref)
         )}
       </View>
-    );
-  };
+    )
+  }
 
   /**
    * 表单项渲染
@@ -46,36 +46,45 @@ function ItemRendered<T extends UTableCommonItemBase>(
     columnConfig,
     index,
   ) => {
-    return (
+    const alignItems =
+      columnConfig?.align === 'center'
+        ? 'center'
+        : columnConfig?.align === 'right'
+        ? 'flex-end'
+        : 'flex-start'
+
+    return columnConfig.render ? (
       <View
-        style={[
-          styles.cellWrapper,
-          {
-            padding: columnConfig?.padding ?? 8,
-            paddingHorizontal: columnConfig?.padding,
-            alignItems:
-              columnConfig?.align === 'center'
-                ? 'center'
-                : columnConfig?.align === 'right'
-                ? 'flex-end'
-                : 'flex-start',
-          },
-        ]}>
-        {columnConfig.render ? (
-          columnConfig.render(columnData, index, ref)
-        ) : (
-          <Text>{columnData[columnConfig.dataIndex]}</Text>
-        )}
+        style={{
+          paddingVertical: columnConfig?.padding ?? 8,
+          alignItems,
+          justifyContent: 'center',
+          flex: 1,
+        }}>
+        {columnConfig.render(columnData, index, ref)}
+        {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
       </View>
-    );
-  };
+    ) : (
+      <View
+        style={{
+          alignItems,
+          justifyContent: 'center',
+          flex: 1,
+        }}>
+        <Text style={{padding: 8, flexGrow: columnConfig.footer ? 1 : 0}}>
+          {columnData[columnConfig.dataIndex]}
+        </Text>
+        {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
+      </View>
+    )
+  }
 
   const isHorizontalScroll: boolean = useMemo(() => {
     return (
       column.reduce((prev, curr) => prev + (curr?.width ?? 60), 0) >
       Dimensions.get('window').width
-    );
-  }, [column]);
+    )
+  }, [column])
 
   return (
     <ScrollView horizontal={isHorizontalScroll}>
@@ -106,7 +115,7 @@ function ItemRendered<T extends UTableCommonItemBase>(
                   width={rowData.width}
                   data={renderElementTitleCell(rowData, index)}
                 />
-              );
+              )
             })}
           </TableWrapper>
         )}
@@ -122,10 +131,11 @@ function ItemRendered<T extends UTableCommonItemBase>(
                   width={colConfig.width}
                   data={renderElementCell(rowData, colConfig, index)}
                 />
-              );
+              )
             })}
           </TableWrapper>
         ))}
+
         {/* 这里规定是常规表单项(有表头、有标题)没数据的情况才显示暂无数据 */}
         {!dataSource?.length && !!title && column.every(i => !!i.title) && (
           <TableWrapper style={styles.row}>
@@ -138,10 +148,10 @@ function ItemRendered<T extends UTableCommonItemBase>(
         )}
       </Table>
     </ScrollView>
-  );
+  )
 }
 
-export default ItemRendered;
+export default ItemRendered
 
 const styles = StyleSheet.create({
   container: {flex: 1, paddingHorizontal: 16},
@@ -166,8 +176,4 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontWeight: 'bold',
   },
-  cellWrapper: {
-    paddingHorizontal: 5,
-    fontSize: 8,
-  },
-});
+})

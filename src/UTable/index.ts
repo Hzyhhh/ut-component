@@ -1,5 +1,5 @@
-import UTable, {UTableProps} from './UTable';
-import ItemRendered from './ItemRendered';
+import UTable, {UTableProps} from './UTable'
+import ItemRendered from './ItemRendered'
 import {
   UTableCommonItemBase,
   ColumnsBase,
@@ -8,9 +8,10 @@ import {
   ElementCellRendered,
   ElementTitleCellRendered,
   DataSourceType,
-} from './type';
+  ColumnsType,
+} from './type'
 
-export type {UTableProps};
+export type {UTableProps}
 
 export type {
   UTableCommonItemBase,
@@ -20,10 +21,11 @@ export type {
   ElementCellRendered,
   ElementTitleCellRendered,
   DataSourceType,
-};
+  ColumnsType,
+}
 
 // @ts-ignore
-UTable.ItemRendered = ItemRendered;
+UTable.ItemRendered = ItemRendered
 
-export {UTable, ItemRendered};
-export default UTable;
+export {UTable, ItemRendered}
+export default UTable

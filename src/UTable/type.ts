@@ -1,43 +1,43 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement} from 'react'
 
 export interface UTableCommonItemBase {
-  id: string;
-  sortId: number;
+  id: string
+  sortId: number
   /**
    * 未完成 未上传 => 未执行
    * 已完成 未上传 => 离线已执行
    * 未完成 已上传 => 不存在这种情况
    * 已完成 已上传 => 已调接口执行
    */
-  isFinished?: boolean;
-  isUploaded?: boolean;
+  isFinished?: boolean
+  isUploaded?: boolean
 
   /**
    * Other
    */
-  [key: string]: any;
+  [key: string]: any
 }
 export interface ColumnsBase<T extends UTableCommonItemBase> {
   /**
    * 数据字段
    */
-  dataIndex: string;
+  dataIndex: string
   /**
    * 表头
    */
-  title?: string | React.ReactNode;
+  title?: string | React.ReactNode
   /**
    * padding
    */
-  padding?: number;
+  padding?: number
   /**
    *  对齐
    */
-  align?: 'center' | 'left' | 'right';
+  align?: 'center' | 'left' | 'right'
   /**
    * 宽度
    */
-  width?: number;
+  width?: number
   /**
    * 自定义渲染
    */
@@ -45,67 +45,82 @@ export interface ColumnsBase<T extends UTableCommonItemBase> {
     row: T,
     index?: number,
     instance?: UTableMethods<T>,
-  ) => React.ReactElement;
+  ) => React.ReactElement
+
+  /**
+   * 底部渲染
+   */
+  footer?: (
+    row: T,
+    index?: number,
+    instance?: UTableMethods<T>,
+  ) => React.ReactElement
 }
 
 export interface UTableMethods<T> {
-  getList: (key: string) => T[];
-  getCurrentOfflineList?: (key: string) => T[];
-  setItem: (key: string, item: T) => T;
+  getList: (key: string) => T[]
+  getCurrentOfflineList?: (key: string) => T[]
+  setItem: (key: string, item: T) => T
   /**
    *
    */
-  trigger: (type: string, defaultParams: any) => void;
+  trigger: (type: string, defaultParams: any) => void
 }
 
 export interface ItemRenderedProps<T extends UTableCommonItemBase> {
-  title?: string;
-  dataSource: T[];
-  column: ColumnsBase<T>[];
-  instance?: UTableMethods<T>;
-  borderWidth?: number;
-  borderColor?: string;
+  title?: string
+  dataSource: T[]
+  column: ColumnsBase<T>[]
+  instance?: UTableMethods<T>
+  borderWidth?: number
+  borderColor?: string
 
-  header?: ColumnsBase<T>[];
-  footer?: ColumnsBase<T>[];
-  TableHeaderComponent?: () => React.ReactElement;
-  TableFooterComponent?: () => React.ReactElement;
+  header?: ColumnsBase<T>[]
+  footer?: ColumnsBase<T>[]
+  TableHeaderComponent?: () => React.ReactElement
+  TableFooterComponent?: () => React.ReactElement
 }
 
 export type ElementCellRendered<T extends UTableCommonItemBase> = (
   columnData: T,
   columnConfig: ColumnsBase<T>,
   index: number,
-) => ReactElement;
+) => ReactElement
 
 export type ElementTitleCellRendered<T extends UTableCommonItemBase> = (
   columnData: ColumnsBase<T>,
   index: number,
-) => React.ReactElement;
+) => React.ReactElement
 
 export type ElementCustomRendered<T extends UTableCommonItemBase> = (
   columnData: ColumnsBase<T>,
-) => React.ReactElement;
+) => React.ReactElement
+
+export type TriggerFunction<T extends UTableCommonItemBase> = (
+  type: string,
+  defaultParams: any,
+  instance: UTableMethods<T>,
+) => void
 
 export interface DataSourceType<T extends UTableCommonItemBase> {
-  title?: string;
+  title?: string
   /**
    * 定义表单列表
    */
-  list: T[];
+  list: T[]
   /**
    * 自定义该表单的头部(标题下一行)
    */
-  header?: ColumnsBase<T>[];
+  header?: ColumnsBase<T>[]
   /**
    * 自定义该表单的底部
    */
-  footer?: ColumnsBase<T>[];
+  footer?: ColumnsBase<T>[]
 }
 
 export interface ColumnsType<T extends UTableCommonItemBase> {
   /**
    * 定义多个表单字段
    */
-  [key: string]: ColumnsBase<T>[];
+  [key: string]: ColumnsBase<T>[]
 }
