@@ -1,5 +1,12 @@
-import React, {useMemo} from 'react'
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native'
+import React, {useMemo, useState, useCallback} from 'react'
+import {
+  Dimensions,
+  LayoutChangeEvent,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import {Cell, Row, Table, TableWrapper} from '../table-component'
 import {
   ElementCellRendered,
@@ -19,7 +26,8 @@ function ItemRendered<T extends UTableCommonItemBase>(
     borderColor = '#ccc',
     instance: ref,
   } = props
-
+  const [innerHeight, setInnerHeight] = useState(0)
+  const [isFirstRender, setIsFirstRender] = useState(true)
   /**
    * 表单头部渲染
    */
@@ -39,45 +47,58 @@ function ItemRendered<T extends UTableCommonItemBase>(
   }
 
   /**
+   * hack
+   */
+  const handleLayoutChange = useCallback(
+    (e: LayoutChangeEvent) => {
+      if (isFirstRender) {
+        setIsFirstRender(false)
+        setInnerHeight(e.nativeEvent.layout.height)
+      }
+    },
+    [isFirstRender],
+  )
+
+  /**
    * 表单项渲染
    */
-  const renderElementCell: ElementCellRendered<T> = (
-    columnData,
-    columnConfig,
-    index,
-  ) => {
-    const alignItems =
-      columnConfig?.align === 'center'
-        ? 'center'
-        : columnConfig?.align === 'right'
-        ? 'flex-end'
-        : 'flex-start'
+  const renderElementCell: ElementCellRendered<T> = useCallback(
+    (columnData, columnConfig, index) => {
+      const alignItems =
+        columnConfig?.align === 'center'
+          ? 'center'
+          : columnConfig?.align === 'right'
+          ? 'flex-end'
+          : 'flex-start'
 
-    return columnConfig.render ? (
-      <View
-        style={{
-          paddingVertical: columnConfig?.padding ?? 8,
-          alignItems,
-          justifyContent: 'center',
-          flex: 1,
-        }}>
-        {columnConfig.render(columnData, index, ref)}
-        {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
-      </View>
-    ) : (
-      <View
-        style={{
-          alignItems,
-          justifyContent: 'center',
-          flex: 1,
-        }}>
-        <Text style={{padding: 8, flexGrow: columnConfig.footer ? 1 : 0}}>
-          {columnData[columnConfig.dataIndex]}
-        </Text>
-        {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
-      </View>
-    )
-  }
+      return columnConfig.render ? (
+        <View
+          onLayout={handleLayoutChange}
+          style={{
+            paddingVertical: columnConfig?.padding ?? 8,
+            alignItems,
+            justifyContent: 'center',
+            flex: 1,
+          }}>
+          {columnConfig.render(columnData, index, ref, {innerHeight})}
+          {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
+        </View>
+      ) : (
+        <View
+          style={{
+            alignItems,
+            justifyContent: 'center',
+            flex: 1,
+          }}>
+          <Text style={{padding: 8, flexGrow: columnConfig.footer ? 1 : 0}}>
+            {columnData[columnConfig.dataIndex]}
+          </Text>
+          {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
+        </View>
+      )
+    },
+    [innerHeight],
+  )
 
   const isHorizontalScroll: boolean = useMemo(() => {
     return (
@@ -136,7 +157,7 @@ function ItemRendered<T extends UTableCommonItemBase>(
           </TableWrapper>
         ))}
 
-        {/* 这里规定是常规表单项(有表头、有标题)没数据的情况才显示暂无数据 */}
+        {/* 这里规定常规表单项(有表头、有标题)没数据的情况才显示暂无数据 */}
         {!dataSource?.length && !!title && column.every(i => !!i.title) && (
           <TableWrapper style={styles.row}>
             <Row

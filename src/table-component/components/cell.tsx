@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, ViewStyle, TextStyle} from 'react-native'
 
@@ -25,6 +24,7 @@ export class Cell extends Component<
       borderStyle,
       ...props
     } = this.props
+
     const textDom = React.isValidElement(data) ? (
       data
     ) : (

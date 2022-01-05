@@ -45,6 +45,7 @@ export interface ColumnsBase<T extends UTableCommonItemBase> {
     row: T,
     index?: number,
     instance?: UTableMethods<T>,
+    option?: {innerHeight: number},
   ) => React.ReactElement
 
   /**
