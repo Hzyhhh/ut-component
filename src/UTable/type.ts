@@ -1,8 +1,8 @@
 import React, {ReactElement} from 'react'
 
 export interface UTableCommonItemBase {
-  id: string
-  sortId: number
+  id?: string
+  sortId?: number
   /**
    * 未完成 未上传 => 未执行
    * 已完成 未上传 => 离线已执行
@@ -17,7 +17,7 @@ export interface UTableCommonItemBase {
    */
   [key: string]: any
 }
-export interface ColumnsBase<T extends UTableCommonItemBase> {
+export interface ColumnsBase<T extends {}> {
   /**
    * 数据字段
    */

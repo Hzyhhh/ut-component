@@ -1,4 +1,4 @@
-import UTable, {UTableProps} from './UTable'
+import UTable, {createProps, UTableProps} from './UTable'
 import ItemRendered from './ItemRendered'
 import {
   UTableCommonItemBase,
@@ -10,6 +10,7 @@ import {
   DataSourceType,
   ColumnsType,
 } from './type'
+import React from 'react'
 
 export type {UTableProps}
 
@@ -24,8 +25,12 @@ export type {
   ColumnsType,
 }
 
-// @ts-ignore
-UTable.ItemRendered = ItemRendered
-
-export {UTable, ItemRendered}
-export default UTable
+export default class _UTable<T extends {}> extends React.Component<
+  UTableProps<T>
+> {
+  public static createProps = createProps
+  public static ItemRendered = ItemRendered
+  render() {
+    return <UTable {...this.props} />
+  }
+}

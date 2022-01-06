@@ -6,6 +6,7 @@ import React, {
 } from 'react'
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
+  ColumnsBase,
   ColumnsType,
   DataSourceType,
   UTableCommonItemBase,
@@ -42,7 +43,7 @@ export interface UTableProps<T extends UTableCommonItemBase> {
   /**
    * 当前票Id 存数据的主键
    */
-  ticketId: string
+  ticketId?: string
   wrapperComponentRef?: React.Ref<UTableMethods<T>>
   persistKey?: string
   /**
@@ -264,6 +265,12 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
 }
 
 export default UTable
+
+export function createProps<T extends {}>(
+  props: ColumnsBase<T>[],
+): ColumnsBase<T>[] {
+  return props
+}
 
 const styles = StyleSheet.create({
   container: {flex: 1, paddingHorizontal: 12},
