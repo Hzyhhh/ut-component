@@ -1,7 +1,8 @@
 /**
  * file description:
  */
-import {StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native'
+import DefiniteUnit from './DefiniteUnit'
 
 const MainStyle = StyleSheet.create({
   container: {
@@ -91,6 +92,8 @@ const MainStyle = StyleSheet.create({
   overFlowMenuBackdropColor: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
-});
+})
 
-export default MainStyle;
+export default MainStyle
+
+export {MainStyle, DefiniteUnit}
