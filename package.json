@@ -24,7 +24,8 @@
     "build": "rimraf ./dist && tsc",
     "clean": "rimraf node_modules",
     "start": "react-scripts start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "clean-install": "rimraf node_modules && yarn"
   },
   "husky": {
     "hooks": {
@@ -38,6 +39,7 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/react-native": "^0.64.0",
     "@ui-kitten/components": "^5.1.1",
+    "date-fns": "^2.28.0",
     "eslint": "^7.14.0",
     "husky": "^7.0.4",
     "metro-react-native-babel-preset": "^0.66.0",
