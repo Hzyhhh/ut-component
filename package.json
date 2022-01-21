@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./dist && tsc -w",
     "clean": "rimraf node_modules",
     "start": "react-scripts start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

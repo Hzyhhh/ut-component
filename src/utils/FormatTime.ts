@@ -26,6 +26,6 @@ export const FormatTime = (
     }
     return formatTime
   } catch (e) {
-    console.log(`FormatTime ${time} 格式化失败：${e.message}`)
+    console.log(`FormatTime ${time} 格式化失败：${e}`)
   }
 }
