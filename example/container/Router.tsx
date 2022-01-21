@@ -14,7 +14,9 @@ const Stack = createNativeStackNavigator();
 export default () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName="Home">
         <Stack.Screen name="Home" component={Root} />
         <Stack.Screen name="NavigatorSelect" component={NavigatorSelect} />
         <Stack.Screen name="SearchInput" component={SearchInput} />
