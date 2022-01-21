@@ -7,6 +7,7 @@ import {
   SearchInput,
   SearchRadio,
   SearchTags,
+  SearchSelect,
 } from 'ut-component';
 
 const radioList = [
@@ -51,6 +52,11 @@ const BasicUsage: FC = props => {
         autoList={autoList}
       />
       <SearchTags title="数据流" tagList={tagList} />
+      <SearchSelect
+        title="数据流"
+        list={tagList}
+        placeholder="请选择数据流框架"
+      />
     </SearchComponent>
   );
 };
