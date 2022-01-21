@@ -8,7 +8,7 @@ import {
   useStyleSheet,
 } from '@ui-kitten/components'
 import React, {FC, useEffect} from 'react'
-import {View} from 'react-native'
+import {StyleSheet, TouchableOpacity, View} from 'react-native'
 import {MainStyle} from '../../MainStyle'
 import {styles} from '../styles'
 
@@ -72,10 +72,30 @@ export const SearchSelectOption: FC<SearchSelectOptionProps> = props => {
           ]}>
           <Select
             {...other}
-            style={{width: '100%'}}
+            style={StyleSheet.flatten([
+              {width: '100%'},
+              MainStyle.rowCenterCenter,
+            ])}
             size="small"
             status={error?.length ? 'danger' : 'basic'}
             value={list[selectedIndex?.row]?.text}
+            accessoryRight={
+              selectedIndex.row > -1 ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedIndex(new IndexPath(-1))
+                  }}>
+                  <Icon
+                    name="x"
+                    pack={'feather'}
+                    style={StyleSheet.flatten([
+                      pageStyle.itemIcon,
+                      {color: 'red', marginLeft: 2},
+                    ])}
+                  />
+                </TouchableOpacity>
+              ) : undefined
+            }
             onSelect={handleSelect}>
             {list.map(i => (
               <SelectItem key={i.value} title={i.text} />
