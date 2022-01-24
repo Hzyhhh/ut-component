@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "bind": "adb reverse tcp:8081 tcp:8081",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
@@ -22,7 +23,7 @@
     "react-native-screens": "^3.10.1",
     "react-native-svg": "^12.1.1",
     "react-native-vector-icons": "^9.0.0",
-    "ut-component": "^0.0.17"
+    "ut-component": "^0.0.18"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

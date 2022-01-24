@@ -6641,10 +6641,10 @@ use@^3.1.0:
   resolved "https://registry.npm.taobao.org/use/download/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha1-1QyMrHmhn7wg8pEfVuuXP04QBw8=
 
-ut-component@^0.0.17:
-  version "0.0.17"
-  resolved "https://registry.npmmirror.com/ut-component/download/ut-component-0.0.17.tgz#9482ab1d60ef3df736dfaeb45e11ecdbf39f6cc8"
-  integrity sha512-s63hZrXKtBgwpgT9CDk9O4xnWG+29/Msk8VG5SOYwauIU+0sO+jVFEaROuUZRmm9XujPknu5xRBsVCEls0Zl/g==
+ut-component@^0.0.18:
+  version "0.0.18"
+  resolved "https://registry.npmmirror.com/ut-component/download/ut-component-0.0.18.tgz#494c5848839dbd664a0773a31915e7f05f5de35d"
+  integrity sha512-cyFAddvLCqLxXFGn0REXqARgoQva9Wm4wp/RrJk1q47HEjSF03OpIiTY+r+0HwEgYmO8PfAkdrAvBWpABg3LBQ==
 
 util-deprecate@~1.0.1:
   version "1.0.2"
