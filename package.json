@@ -5,9 +5,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "author": "hzy",
-  "files": [
-    "dist/"
-  ],
   "keywords": [
     "react-native",
     "reactjs"
@@ -25,7 +22,8 @@
     "clean": "rimraf node_modules",
     "start": "react-scripts start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "clean-install": "rimraf node_modules && yarn"
+    "clean-install": "rimraf node_modules && yarn",
+    "change": "cp -f -R ./dist example/node_modules/ut-component"
   },
   "husky": {
     "hooks": {
