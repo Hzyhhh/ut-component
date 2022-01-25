@@ -39,3 +39,11 @@ const App = () => <SearchComponents.Input title="Hello World" />
 ```shell
 $ cd example && yarn && yarn android
 ```
+
+### 调试开发须知
+
+由于`react-native`并未支持`symlinks`,也就是说不能通过软链`yarn link`的方式模拟本地依赖的导入。
+
+因此在本组件库的开发中，提供以下解决方案：`yarn build` 命令会实时监听更改的文件进行持续打包, 在 example 内需要进行调试时, 可以运行`yarn change`直接更改`node_modules/ut-component`下的`dist`文件夹。
+
+当然，除了这种方式之外，也可以考虑使用`yalc`的方式模拟软链
