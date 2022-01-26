@@ -8,6 +8,7 @@ import SearchInput from './SearchComponents/SearchInput';
 import SearchRadio from './SearchComponents/SearchRadio';
 import SearchAutoInput from './SearchComponents/SearchAutoInput';
 import BasicUsage from './SearchComponents/BasicUsage';
+import BaseTable from './Utable/BaseTable';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,8 @@ export default () => {
         <Stack.Screen name="SearchAutoInput" component={SearchAutoInput} />
         <Stack.Screen name="SearchRadio" component={SearchRadio} />
         <Stack.Screen name="BasicUsage" component={BasicUsage} />
+        {/* 表单 */}
+        <Stack.Screen name="BaseTable" component={BaseTable} />
       </Stack.Navigator>
     </NavigationContainer>
   );

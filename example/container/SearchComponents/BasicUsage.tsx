@@ -1,11 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
-import {
-  Divider,
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-} from '@ui-kitten/components';
+import {Layout} from '@ui-kitten/components';
 import React, {FC} from 'react';
 import {
   AutoItemType,
@@ -18,6 +11,7 @@ import {
   SearchSelect,
   RightActionsRendered,
 } from 'ut-component';
+import TopNavigation from '../../components/TopNavigation';
 
 const radioList = [
   {value: 'male', title: '男'},
@@ -36,10 +30,6 @@ const tagList = [
   {value: 'redux', text: 'Redux'},
 ];
 
-const BackIcon = props => (
-  <Icon {...props} pack="feather" name="chevron-left" />
-);
-
 const renderRightActions = () => (
   <RightActionsRendered>
     <RightActionsRendered.MenuItem title="123" />
@@ -47,26 +37,13 @@ const renderRightActions = () => (
 );
 
 const BasicUsage: FC = props => {
-  const navigation = useNavigation();
-
   const handleNameChange = (name: string) => {
     console.log(name);
   };
 
-  const renderBackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={() => navigation.goBack()} />
-  );
-
   return (
     <Layout level="1">
-      <TopNavigation
-        alignment="center"
-        title="Eva Application"
-        subtitle="Subtitle"
-        accessoryLeft={renderBackAction}
-        accessoryRight={renderRightActions}
-      />
-      <Divider />
+      <TopNavigation accessoryRight={renderRightActions} />
 
       <SearchComponent>
         <SearchInput
