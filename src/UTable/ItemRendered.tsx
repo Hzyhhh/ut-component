@@ -90,9 +90,11 @@ function ItemRendered<T extends UTableCommonItemBase>(
             justifyContent: 'center',
             flex: 1,
           }}>
-          <Text style={{padding: 8, flexGrow: columnConfig.footer ? 1 : 0}}>
-            {columnData[columnConfig.dataIndex]}
-          </Text>
+          {columnConfig?.dataIndex && (
+            <Text style={{padding: 8, flexGrow: columnConfig.footer ? 1 : 0}}>
+              {columnData[columnConfig?.dataIndex]}
+            </Text>
+          )}
           {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
         </View>
       )
@@ -142,13 +144,13 @@ function ItemRendered<T extends UTableCommonItemBase>(
         )}
 
         {/* 表格 */}
-        {dataSource?.map((rowData, rowIndex) => (
-          <TableWrapper key={rowData.id} style={styles.row}>
+        {dataSource?.map(rowData => (
+          <TableWrapper key={rowData.id ?? rowData.sortId} style={styles.row}>
             {/* 表项 */}
             {column.map((colConfig, index) => {
               return (
                 <Cell
-                  key={`${rowIndex}${index}`}
+                  key={`${rowData.id ?? rowData.sortId}-${index}`}
                   width={colConfig.width}
                   data={renderElementCell(rowData, colConfig, index)}
                 />

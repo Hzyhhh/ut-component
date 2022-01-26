@@ -21,7 +21,7 @@ export interface ColumnsBase<T extends {}> {
   /**
    * 数据字段
    */
-  dataIndex: string
+  dataIndex?: string
   /**
    * 表头
    */

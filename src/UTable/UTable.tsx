@@ -273,5 +273,5 @@ export function createProps<T extends {}>(
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, paddingHorizontal: 12},
+  container: {flex: 1, paddingHorizontal: 12, marginTop: 1},
 })
