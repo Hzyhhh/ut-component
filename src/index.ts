@@ -23,6 +23,7 @@ import SearchComponent, {
   SearchComponentsStyles,
 } from './SearchComponents'
 import {MainStyle, DefiniteUnit} from './MainStyle'
+import WhiteSpace, {IWhiteSpace} from './WhiteSpace'
 import utils from './utils'
 
 // Components Props exports
@@ -37,6 +38,7 @@ export type {
   SearchAutoInputProps,
   AutoItemType,
   NavigatorSelectProps,
+  IWhiteSpace,
 }
 
 // Components exports
@@ -54,4 +56,5 @@ export {
   MainStyle,
   DefiniteUnit,
   utils,
+  WhiteSpace,
 }
