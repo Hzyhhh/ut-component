@@ -45,11 +45,14 @@ export class TableWrapper extends Component<
   Partial<{style: StyleProp<ViewStyle>}>
 > {
   _renderChildren(props) {
-    return React.Children.map(props.children, child =>
-      React.cloneElement(
-        child,
-        props?.borderStyle ? {borderStyle: props?.borderStyle} : {},
-      ),
+    return React.Children.map(
+      props.children,
+      child =>
+        child &&
+        React.cloneElement(
+          child,
+          props?.borderStyle ? {borderStyle: props?.borderStyle} : {},
+        ),
     )
   }
 
