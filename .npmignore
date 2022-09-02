@@ -4,7 +4,8 @@ src
 .eslintrc
 .gitattributes
 .gitignore
-.prettierrc
-.prettierrc
+.gitlab-ci.yml
+.prettierrc.js
+babel.config.js
 example
 tsconfig.json
