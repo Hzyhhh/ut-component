@@ -13,7 +13,7 @@ import {
   ElementTitleCellRendered,
   ItemRenderedProps,
   UTableCommonItemBase,
-} from '../UTable'
+} from './type'
 
 function ItemRendered<T extends UTableCommonItemBase>(
   props: ItemRenderedProps<T>,

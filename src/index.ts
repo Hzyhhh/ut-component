@@ -1,4 +1,8 @@
-import UTable, {UTableProps} from './UTable'
+import UTable, {
+  UTableProps,
+  UTableTypes,
+  useImproveSuggestTable,
+} from './UTable'
 import RightActionsRendered from './RightActionsRendered'
 import SearchComponent, {
   // 组件
@@ -24,8 +28,9 @@ import {MainStyle, DefiniteUnit} from './MainStyle'
 import WhiteSpace, {IWhiteSpace} from './WhiteSpace'
 import utils from './utils'
 
-// Components Props exports
+// Components Types exports
 export type {
+  UTableTypes,
   UTableProps,
   SearchBaseProps,
   SearchInputProps,
@@ -55,3 +60,8 @@ export {
   utils,
   WhiteSpace,
 }
+
+/**
+ * hooks
+ */
+export {useImproveSuggestTable}
