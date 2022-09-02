@@ -9,6 +9,7 @@ export class Cell extends Component<
     height
     flex
     style: ViewStyle
+    needBorderLine?: boolean
     textStyle: TextStyle
     borderStyle: TextStyle
   }>
@@ -21,6 +22,7 @@ export class Cell extends Component<
       flex,
       style,
       textStyle,
+      needBorderLine = true,
       borderStyle,
       ...props
     } = this.props
@@ -39,7 +41,7 @@ export class Cell extends Component<
     return (
       <View
         style={[
-          {
+          needBorderLine && {
             borderTopWidth,
             borderRightWidth,
             borderColor,

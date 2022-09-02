@@ -15,15 +15,8 @@ export class Row extends Component<
   }>
 > {
   render() {
-    const {
-      data,
-      style,
-      widthArr,
-      height,
-      flexArr,
-      textStyle,
-      ...props
-    } = this.props
+    const {data, style, widthArr, height, flexArr, textStyle, ...props} =
+      this.props
     let width = widthArr ? sum(widthArr) : 0
 
     return data ? (
@@ -59,15 +52,8 @@ export class Rows extends Component<
   }>
 > {
   render() {
-    const {
-      data,
-      style,
-      widthArr,
-      heightArr,
-      flexArr,
-      textStyle,
-      ...props
-    } = this.props
+    const {data, style, widthArr, heightArr, flexArr, textStyle, ...props} =
+      this.props
     const flex = flexArr ? sum(flexArr) : 0
     const width = widthArr ? sum(widthArr) : 0
 

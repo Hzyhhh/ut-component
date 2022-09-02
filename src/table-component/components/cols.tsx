@@ -21,15 +21,8 @@ export class Col extends Component<
   }>
 > {
   render() {
-    const {
-      data,
-      style,
-      width,
-      heightArr,
-      flex,
-      textStyle,
-      ...props
-    } = this.props
+    const {data, style, width, heightArr, flex, textStyle, ...props} =
+      this.props
 
     return data ? (
       <View
@@ -68,15 +61,8 @@ export class Cols extends Component<
   }>
 > {
   render() {
-    const {
-      data,
-      style,
-      widthArr,
-      heightArr,
-      flexArr,
-      textStyle,
-      ...props
-    } = this.props
+    const {data, style, widthArr, heightArr, flexArr, textStyle, ...props} =
+      this.props
     let width = widthArr ? sum(widthArr) : 0
 
     return data ? (

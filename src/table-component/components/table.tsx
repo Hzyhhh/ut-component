@@ -48,7 +48,7 @@ export class TableWrapper extends Component<
     return React.Children.map(props.children, child =>
       React.cloneElement(
         child,
-        props.borderStyle ? {borderStyle: props.borderStyle} : {},
+        props?.borderStyle ? {borderStyle: props?.borderStyle} : {},
       ),
     )
   }
