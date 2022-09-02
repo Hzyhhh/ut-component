@@ -1,6 +1,6 @@
 {
   "name": "ut-component",
-  "version": "0.0.18",
+  "version": "0.1.0-beta",
   "description": "UT Business Component",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
