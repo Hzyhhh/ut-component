@@ -4,7 +4,6 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react'
-// import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   ColumnsBase,
   ColumnsType,
@@ -13,7 +12,14 @@ import {
   UTableMethods,
 } from './type'
 import ItemRendered from './ItemRendered'
-import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native'
+import {
+  RefreshControl,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native'
 
 export interface UTableProps<T extends UTableCommonItemBase> {
   /**
@@ -24,6 +30,14 @@ export interface UTableProps<T extends UTableCommonItemBase> {
    * 边框颜色
    */
   borderColor?: string
+  /**
+   * 是否展示下拉刷新
+   */
+  showRefresh?: boolean
+  /**
+   * 外部传入样式
+   */
+  style?: StyleProp<ViewStyle>
   /**
    * 刷新标题
    */
@@ -87,6 +101,7 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const {
     borderWidth,
     borderColor,
+    showRefresh,
     loading = false,
     refreshTitle = 'refreshTitle',
     ticketId,
@@ -100,7 +115,6 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
     onTrigger,
     onRefresh,
   } = props
-  // const {setItem, getItem} = useAsyncStorage(persistKey);
   const [dataSource, setDataSource] = useState<{
     [key: string]: DataSourceType<T>
   }>({})
@@ -135,45 +149,6 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   }
 
   /**
-   * 更新所有离线数据
-   */
-  // const handleSetCurrentOfflineItem = (item: {[key: string]: DataSourceType<T>}) => {
-  //   const recoverMap = recoverOfflineData()
-  //   recoverMap.set(ticketId, item)
-
-  //   AsyncStorage.setItem(persistKey, JSON.stringify(Array.from(recoverMap.entries())))
-  // }
-
-  /**
-   *  获取离线数据
-   */
-  // const handleCurrentOfflineList: (key: string) => T[] = (key) => {
-  //   const recoverMap = recoverOfflineData()
-  //   const payload = recoverMap.get(ticketId)
-  //   return payload?.[key]?.list ?? []
-  // }
-
-  // const recoverOfflineData: () => Map<string, {[key: string]: DataSourceType<T>}> = () => {
-  //   let map = new Map<string, {[key: string]: DataSourceType<T>}>()
-
-  //   AsyncStorage.getItem(persistKey, (err, str) => {
-  //     if (err) {
-  //       onToast?.(err.message)
-  //       return
-  //     }
-  //     if (!str) {
-  //       onToast?.(persistKey + ' 不存在缓存数据')
-  //     }
-  //     console.log('str', persistKey, str)
-
-  //     const parseData = str ? JSON.parse(str) : new Map()
-  //     console.log('parseData', parseData)
-  //     map = new Map(parseData)
-  //   })
-  //   return map
-  // }
-
-  /**
    * 渲染表单主要信息
    */
   const renderHeader: () => React.ReactElement = useCallback(() => {
@@ -203,25 +178,16 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   }, [UTableRef])
 
   useEffect(() => {
-    // const coverMap = recoverOfflineData()
     setColumns(column)
     if (value) {
       setDataSource(value)
-
-      // handleSetCurrentOfflineItem(value)
     }
-    // else {
-    // if (coverMap.get(ticketId)) {
-    //   setDataSource(coverMap.get(ticketId)!)
-    // }
-    // }
   }, [value, column, ticketId])
 
   // 数据变动时将钩子方法更新
   useEffect(() => {
     setUTableRef({
       getList: (key: string) => dataSource?.[key]?.list,
-      // getCurrentOfflineList: handleCurrentOfflineList,
       setItem: handleUpdateCurrentList,
       trigger: (...params) => onTrigger?.(...params, UTableRef!),
     })
@@ -234,13 +200,23 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          title={refreshTitle}
-          onRefresh={handleRefresh}
-        />
+        showRefresh ? (
+          <RefreshControl
+            refreshing={refreshing}
+            title={refreshTitle}
+            onRefresh={handleRefresh}
+          />
+        ) : undefined
       }>
-      <View style={styles.container}>
+      <View
+        style={StyleSheet.flatten([
+          props.style,
+          {
+            marginLeft: borderWidth
+              ? -borderWidth
+              : styles.container.marginLeft,
+          },
+        ])}>
         {renderHeader()}
         <View style={{marginTop: -1}} />
         {Object.keys(dataSource).map(i => {
@@ -250,8 +226,7 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
               borderWidth={borderWidth}
               borderColor={borderColor}
               instance={UTableRef}
-              title={dataSource[i]?.title}
-              dataSource={dataSource[i]?.list}
+              dataSource={dataSource[i]}
               column={columns?.[i]}
               // header={dataSource[i].header}
               // footer={dataSource[i].footer}
@@ -273,5 +248,7 @@ export function createProps<T extends {}>(
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, paddingHorizontal: 12, marginTop: 1},
+  container: {
+    marginLeft: -1,
+  },
 })

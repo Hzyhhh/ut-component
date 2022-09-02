@@ -19,15 +19,23 @@ function ItemRendered<T extends UTableCommonItemBase>(
   props: ItemRenderedProps<T>,
 ) {
   const {
-    title,
     dataSource,
     column,
     borderWidth = 0.5,
     borderColor = '#ccc',
     instance: ref,
   } = props
+  const {
+    title,
+    list,
+    rowStyle,
+    rowBgColor = '#F7F9FC',
+    titleRightRendered,
+  } = dataSource || {}
+
   const [innerHeight, setInnerHeight] = useState(0)
   const [isFirstRender, setIsFirstRender] = useState(true)
+
   /**
    * 表单头部渲染
    */
@@ -65,11 +73,28 @@ function ItemRendered<T extends UTableCommonItemBase>(
   const renderElementCell: ElementCellRendered<T> = useCallback(
     (columnData, columnConfig, index) => {
       const alignItems =
-        columnConfig?.align === 'center'
-          ? 'center'
+        columnConfig?.align === 'left'
+          ? 'flex-start'
           : columnConfig?.align === 'right'
           ? 'flex-end'
-          : 'flex-start'
+          : 'center'
+
+      if (columnConfig?.renderText) {
+        return (
+          <View
+            onLayout={handleLayoutChange}
+            style={{
+              alignItems,
+              justifyContent: 'center',
+              flex: 1,
+            }}>
+            <Text style={{padding: 8, flexGrow: columnConfig.footer ? 1 : 0}}>
+              {columnConfig.renderText(columnData, index, ref, {innerHeight})}
+            </Text>
+            {columnConfig.footer?.(columnData, index, ref)}
+          </View>
+        )
+      }
 
       return columnConfig.render ? (
         <View
@@ -118,18 +143,25 @@ function ItemRendered<T extends UTableCommonItemBase>(
           borderColor,
         }}>
         {!!title && (
-          <TableWrapper style={[styles.row, styles.formBackground]}>
+          <TableWrapper style={[styles.row, styles.formBackground, rowStyle]}>
             {/* 标题 */}
             <Row
               style={styles.formTitleWrapper}
               textStyle={styles.formTitle}
               data={[title]}
             />
+            {!!titleRightRendered && (
+              <Cell
+                needBorderLine={false}
+                style={{position: 'absolute', right: 5, top: '25%'}}
+                data={titleRightRendered(title)}
+              />
+            )}
           </TableWrapper>
         )}
 
         {column.every(i => !!i.title) && (
-          <TableWrapper style={[styles.row, styles.formBackground]}>
+          <TableWrapper style={[styles.row, styles.formBackground, rowStyle]}>
             {/* 表头 */}
             {column.map((rowData, index) => {
               return (
@@ -144,8 +176,10 @@ function ItemRendered<T extends UTableCommonItemBase>(
         )}
 
         {/* 表格 */}
-        {dataSource?.map(rowData => (
-          <TableWrapper key={rowData.id ?? rowData.sortId} style={styles.row}>
+        {list?.map(rowData => (
+          <TableWrapper
+            key={rowData.id ?? rowData.sortId}
+            style={[styles.row, rowStyle, {backgroundColor: rowBgColor}]}>
             {/* 表项 */}
             {column.map((colConfig, index) => {
               return (
@@ -160,8 +194,8 @@ function ItemRendered<T extends UTableCommonItemBase>(
         ))}
 
         {/* 这里规定常规表单项(有表头、有标题)没数据的情况才显示暂无数据 */}
-        {!dataSource?.length && !!title && column.every(i => !!i.title) && (
-          <TableWrapper style={styles.row}>
+        {!list?.length && !!title && column.every(i => !!i.title) && (
+          <TableWrapper style={[styles.row, rowStyle]}>
             <Row
               style={styles.formTitleWrapper}
               textStyle={styles.formTitle}
@@ -186,6 +220,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   formTitle: {
+    fontSize: 15,
     paddingVertical: 5,
     textAlign: 'center',
     fontWeight: 'bold',
@@ -197,6 +232,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
+    fontSize: 15,
     fontWeight: 'bold',
   },
 })

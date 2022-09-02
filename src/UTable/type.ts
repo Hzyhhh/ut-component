@@ -1,4 +1,5 @@
 import React, {ReactElement} from 'react'
+import {StyleProp, ViewStyle} from 'react-native'
 
 export interface UTableCommonItemBase {
   id?: string
@@ -47,7 +48,15 @@ export interface ColumnsBase<T extends {}> {
     instance?: UTableMethods<T>,
     option?: {innerHeight: number},
   ) => React.ReactElement
-
+  /**
+   * 自定义渲染文本
+   */
+  renderText?: (
+    row: T,
+    index?: number,
+    instance?: UTableMethods<T>,
+    option?: {innerHeight: number},
+  ) => string
   /**
    * 底部渲染
    */
@@ -69,8 +78,7 @@ export interface UTableMethods<T> {
 }
 
 export interface ItemRenderedProps<T extends UTableCommonItemBase> {
-  title?: string
-  dataSource: T[]
+  dataSource: DataSourceType<T>
   column: ColumnsBase<T>[]
   instance?: UTableMethods<T>
   borderWidth?: number
@@ -105,6 +113,9 @@ export type TriggerFunction<T extends UTableCommonItemBase> = (
 
 export interface DataSourceType<T extends UTableCommonItemBase> {
   title?: string
+  titleRightRendered?: (title?: string) => React.ReactDOM
+  rowBgColor?: string
+  rowStyle?: StyleProp<ViewStyle>
   /**
    * 定义表单列表
    */
