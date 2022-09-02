@@ -1,7 +1,5 @@
 import UTable, {UTableProps} from './UTable'
-import RightActionsRendered, {
-  SelfRightActionsRenderedProps,
-} from './RightActionsRendered'
+import RightActionsRendered from './RightActionsRendered'
 import SearchComponent, {
   // 组件
   SearchInput,
@@ -29,7 +27,6 @@ import utils from './utils'
 // Components Props exports
 export type {
   UTableProps,
-  SelfRightActionsRenderedProps,
   SearchBaseProps,
   SearchInputProps,
   SearchRadioProps,
