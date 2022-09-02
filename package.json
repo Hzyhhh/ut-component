@@ -1,13 +1,15 @@
 {
   "name": "ut-component",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "UT Business Component",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "author": "hzy",
   "keywords": [
     "react-native",
-    "reactjs"
+    "reactjs",
+    "UT",
+    "ut-component"
   ],
   "repository": {
     "type": "git",
