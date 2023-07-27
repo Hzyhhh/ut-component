@@ -1,26 +1,23 @@
-import React, {FC, useContext} from 'react'
+import React, {FC} from 'react'
 import {
   MenuItem as _MenuItem,
   MenuItemProps as _MenuItemProps,
+  Text,
+  TextProps,
 } from '@ui-kitten/components'
-import {MenuItemDescriptor} from '@ui-kitten/components/ui/menu/menu.service'
-import {GestureResponderEvent} from 'react-native'
-import RightRenderedWrapper from './Context'
+import {RenderProp} from '@ui-kitten/components/devsupport'
 
-export interface MenuItemProps extends _MenuItemProps {}
+export interface MenuItemProps extends Omit<_MenuItemProps, 'title'> {
+  // 重写 title 类型
+  title?: React.ReactElement
+}
 
 export const MenuItem: FC<MenuItemProps> = props => {
-  const context = useContext(RightRenderedWrapper)
+  const _title: RenderProp<TextProps> = titleProps => (
+    <Text {...titleProps}>{props.title}</Text>
+  )
 
-  const handlePress = (
-    descriptor: MenuItemDescriptor,
-    event?: GestureResponderEvent,
-  ) => {
-    context.switch?.()
-    props.onPress?.(descriptor, event)
-  }
-
-  return <_MenuItem {...props} onPress={handlePress} />
+  return <_MenuItem {...props} title={_title} />
 }
 
 export default MenuItem

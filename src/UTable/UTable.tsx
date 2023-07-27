@@ -1,4 +1,10 @@
-import React, {useEffect, useImperativeHandle, useRef, useState} from 'react'
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   ColumnsBase,
   ColumnsType,
@@ -40,7 +46,7 @@ export interface UTableProps<T extends UTableCommonItemBase> {
    */
   refreshTitle?: string
   /**
-   * 下拉loading颜色
+   * 刷新图标定制颜色
    */
   refreshControlColor?: ColorValue
   /**
@@ -100,12 +106,12 @@ export interface UTableProps<T extends UTableCommonItemBase> {
 
 function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const {
+    refreshControlColor = '',
     borderWidth,
     borderColor,
     showRefresh,
     loading = false,
     refreshTitle = 'refreshTitle',
-    refreshControlColor = '',
     ticketId,
     wrapperComponentRef,
     value,
@@ -122,6 +128,19 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const [UTableRef, setUTableRef] = useState<UTableMethods<T>>()
   const [refreshing, setRefreshing] = useState(false)
   const _scroll = useRef<ScrollView>(null)
+
+  const renderRefreshControl = useMemo(() => {
+    if (!showRefresh) return <></>
+
+    return (
+      <RefreshControl
+        refreshing={refreshing}
+        colors={[refreshControlColor]}
+        title={refreshTitle}
+        onRefresh={handleRefresh}
+      />
+    )
+  }, [refreshing])
 
   useImperativeHandle(wrapperComponentRef, () => UTableRef!, [UTableRef])
 
@@ -165,17 +184,12 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const renderFooter: () => React.ReactElement = useMemoizedFn(() => {
     if (footer) {
       return (
-        <View
-          style={{borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc'}}>
+        <View style={styles({borderWidth}).footerBorder}>
           {footer(UTableRef)}
         </View>
       )
     }
-    return (
-      <View
-        style={{borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc'}}
-      />
-    )
+    return <View style={styles({borderWidth}).footerBorder} />
   })
 
   useEffect(() => {
@@ -201,26 +215,11 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   }, [loading])
 
   return (
-    <ScrollView
-      ref={_scroll}
-      refreshControl={
-        showRefresh ? (
-          <RefreshControl
-            colors={[refreshControlColor]}
-            refreshing={refreshing}
-            title={refreshTitle}
-            onRefresh={handleRefresh}
-          />
-        ) : undefined
-      }>
+    <ScrollView ref={_scroll} refreshControl={renderRefreshControl}>
       <View
         style={StyleSheet.flatten([
           props.style,
-          {
-            marginLeft: borderWidth
-              ? -borderWidth
-              : styles.container.marginLeft,
-          },
+          styles({borderWidth}).containerLeft,
         ])}>
         {renderHeader()}
         <View style={{marginTop: -1}} />
@@ -252,8 +251,20 @@ export function createProps<T extends {}>(
   return props
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginLeft: -1,
-  },
-})
+interface StyleConfigType {
+  borderWidth?: number
+}
+
+const styles = (styleConfig?: StyleConfigType) =>
+  StyleSheet.create({
+    container: {
+      marginLeft: -1,
+    },
+    containerLeft: {
+      marginLeft: styleConfig?.borderWidth ? -styleConfig?.borderWidth : -1,
+    },
+    footerBorder: {
+      borderTopWidth: styleConfig?.borderWidth ?? 1,
+      borderTopColor: '#ccc',
+    },
+  })
