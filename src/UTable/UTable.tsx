@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react'
+import React, {useEffect, useImperativeHandle, useRef, useState} from 'react'
 import {
   ColumnsBase,
   ColumnsType,
@@ -13,6 +8,7 @@ import {
 } from './type'
 import ItemRendered from './ItemRendered'
 import {
+  ColorValue,
   RefreshControl,
   ScrollView,
   StyleProp,
@@ -20,6 +16,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import {useMemoizedFn} from './hooks'
 
 export interface UTableProps<T extends UTableCommonItemBase> {
   /**
@@ -42,6 +39,10 @@ export interface UTableProps<T extends UTableCommonItemBase> {
    * 刷新标题
    */
   refreshTitle?: string
+  /**
+   * 下拉loading颜色
+   */
+  refreshControlColor?: ColorValue
   /**
    * 下拉刷新时
    */
@@ -104,12 +105,11 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
     showRefresh,
     loading = false,
     refreshTitle = 'refreshTitle',
+    refreshControlColor = '',
     ticketId,
     wrapperComponentRef,
-    // persistKey = 'UTable',
     value,
     columns: column,
-    onToast,
     header,
     footer,
     onTrigger,
@@ -121,15 +121,16 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   const [columns, setColumns] = useState<ColumnsType<T>>({})
   const [UTableRef, setUTableRef] = useState<UTableMethods<T>>()
   const [refreshing, setRefreshing] = useState(false)
+  const _scroll = useRef<ScrollView>(null)
 
   useImperativeHandle(wrapperComponentRef, () => UTableRef!, [UTableRef])
 
   // 下拉刷新
-  const handleRefresh = useCallback(async () => {
+  const handleRefresh = useMemoizedFn(async () => {
     setRefreshing(true)
     await onRefresh?.()
     setRefreshing(false)
-  }, [])
+  })
 
   /**
    *
@@ -151,17 +152,17 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   /**
    * 渲染表单主要信息
    */
-  const renderHeader: () => React.ReactElement = useCallback(() => {
+  const renderHeader: () => React.ReactElement = useMemoizedFn(() => {
     if (header) {
       return header(UTableRef)
     }
     return <></>
-  }, [UTableRef])
+  })
 
   /**
    * 渲染表单底部信息
    */
-  const renderFooter: () => React.ReactElement = useCallback(() => {
+  const renderFooter: () => React.ReactElement = useMemoizedFn(() => {
     if (footer) {
       return (
         <View
@@ -175,7 +176,7 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
         style={{borderTopWidth: borderWidth ?? 1, borderTopColor: '#ccc'}}
       />
     )
-  }, [UTableRef])
+  })
 
   useEffect(() => {
     setColumns(column)
@@ -187,10 +188,12 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
   // 数据变动时将钩子方法更新
   useEffect(() => {
     setUTableRef({
+      scrollTo: _scroll.current?.scrollTo,
       getList: (key: string) => dataSource?.[key]?.list,
       setItem: handleUpdateCurrentList,
       trigger: (...params) => onTrigger?.(...params, UTableRef!),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSource])
 
   useEffect(() => {
@@ -199,9 +202,11 @@ function UTable<T extends UTableCommonItemBase>(props: UTableProps<T>) {
 
   return (
     <ScrollView
+      ref={_scroll}
       refreshControl={
         showRefresh ? (
           <RefreshControl
+            colors={[refreshControlColor]}
             refreshing={refreshing}
             title={refreshTitle}
             onRefresh={handleRefresh}

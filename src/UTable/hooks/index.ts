@@ -1,3 +1,4 @@
 import useImproveSuggestTable from './useImproveSuggestTable'
+import useMemoizedFn from './useMemoizedFn'
 
-export {useImproveSuggestTable}
+export {useImproveSuggestTable, useMemoizedFn}

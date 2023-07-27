@@ -7,13 +7,14 @@ import {
   Text,
   View,
 } from 'react-native'
-import {Cell, Row, Table, TableWrapper} from '../table-component'
+import {Cell, Col, Row, Table, TableWrapper} from '../table-component'
 import {
   ElementCellRendered,
   ElementTitleCellRendered,
   ItemRenderedProps,
   UTableCommonItemBase,
 } from './type'
+import {useMemoizedFn} from './hooks'
 
 function ItemRendered<T extends UTableCommonItemBase>(
   props: ItemRenderedProps<T>,
@@ -28,7 +29,9 @@ function ItemRendered<T extends UTableCommonItemBase>(
   const {
     title,
     list,
+    groupList,
     rowStyle,
+    rowHeight = 40,
     rowBgColor = '#F7F9FC',
     titleRightRendered,
   } = dataSource || {}
@@ -57,20 +60,17 @@ function ItemRendered<T extends UTableCommonItemBase>(
   /**
    * hack
    */
-  const handleLayoutChange = useCallback(
-    (e: LayoutChangeEvent) => {
-      if (isFirstRender) {
-        setIsFirstRender(false)
-        setInnerHeight(e.nativeEvent.layout.height)
-      }
-    },
-    [isFirstRender],
-  )
+  const handleLayoutChange = useMemoizedFn((e: LayoutChangeEvent) => {
+    if (isFirstRender) {
+      setIsFirstRender(false)
+      setInnerHeight(e.nativeEvent.layout.height)
+    }
+  })
 
   /**
    * 表单项渲染
    */
-  const renderElementCell: ElementCellRendered<T> = useCallback(
+  const renderElementCell: ElementCellRendered<T> = useMemoizedFn(
     (columnData, columnConfig, index) => {
       const alignItems =
         columnConfig?.align === 'left'
@@ -96,7 +96,7 @@ function ItemRendered<T extends UTableCommonItemBase>(
         )
       }
 
-      return columnConfig.render ? (
+      return columnConfig?.render ? (
         <View
           onLayout={handleLayoutChange}
           style={{
@@ -120,11 +120,10 @@ function ItemRendered<T extends UTableCommonItemBase>(
               {columnData[columnConfig?.dataIndex]}
             </Text>
           )}
-          {columnConfig.footer && columnConfig.footer?.(columnData, index, ref)}
+          {columnConfig?.footer?.(columnData, index, ref)}
         </View>
       )
     },
-    [innerHeight],
   )
 
   const isHorizontalScroll: boolean = useMemo(() => {
@@ -174,6 +173,40 @@ function ItemRendered<T extends UTableCommonItemBase>(
             })}
           </TableWrapper>
         )}
+
+        {/* 跨行表格 */}
+        {groupList?.map(rowData => (
+          <TableWrapper
+            key={rowData.id ?? rowData.sortId}
+            style={[styles.row, rowStyle, {backgroundColor: rowBgColor}]}>
+            {/* 表项 */}
+            {column.map((colConfig, index) => {
+              if (colConfig.merge) {
+                return (
+                  <Cell
+                    key={`${rowData.id ?? rowData.sortId}-${index}`}
+                    width={colConfig.width}
+                    data={renderElementCell(rowData, colConfig, index)}
+                  />
+                )
+              } else {
+                if (rowData.children) {
+                  return (
+                    <Col
+                      key={`${rowData.id ?? rowData.sortId}-${index}`}
+                      width={colConfig.width}
+                      data={rowData.children.map(i =>
+                        renderElementCell(i, colConfig, index),
+                      )}
+                      // 最小高度
+                      heightArr={rowData.children.map(() => rowHeight)}
+                    />
+                  )
+                }
+              }
+            })}
+          </TableWrapper>
+        ))}
 
         {/* 表格 */}
         {list?.map(rowData => (

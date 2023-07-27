@@ -13,6 +13,7 @@ import {sum} from '../utils'
 export class Col extends Component<
   Partial<{
     data
+    height
     heightArr
     flex
     width: number
@@ -21,14 +22,15 @@ export class Col extends Component<
   }>
 > {
   render() {
-    const {data, style, width, heightArr, flex, textStyle, ...props} =
+    const {data, style, width, height, heightArr, flex, textStyle, ...props} =
       this.props
 
     return data ? (
       <View
         style={[
-          width ? {width: width} : {flex: 1},
-          flex && {flex: flex},
+          width && {width},
+          flex && {flex},
+          !width && !flex && {flex: 1},
           style,
         ]}>
         {data?.map((item, i) => {

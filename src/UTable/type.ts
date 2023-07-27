@@ -1,5 +1,5 @@
 import React, {ReactElement} from 'react'
-import {StyleProp, ViewStyle} from 'react-native'
+import {LayoutRectangle, StyleProp, ViewStyle} from 'react-native'
 
 export interface UTableCommonItemBase {
   id?: string
@@ -40,13 +40,17 @@ export interface ColumnsBase<T extends {}> {
    */
   width?: number
   /**
+   * 只支持行合并
+   */
+  merge?: boolean
+  /**
    * 自定义渲染
    */
   render?: (
     row: T,
     index?: number,
     instance?: UTableMethods<T>,
-    option?: {innerHeight: number},
+    option?: {innerHeight: number; layout?: LayoutRectangle},
   ) => React.ReactElement
   /**
    * 自定义渲染文本
@@ -68,6 +72,7 @@ export interface ColumnsBase<T extends {}> {
 }
 
 export interface UTableMethods<T> {
+  scrollTo?: (option: {x: number; y: number; animated: boolean}) => void
   getList: (key: string) => T[]
   getCurrentOfflineList?: (key: string) => T[]
   setItem: (key: string, item: T) => T
@@ -117,9 +122,17 @@ export interface DataSourceType<T extends UTableCommonItemBase> {
   rowBgColor?: string
   rowStyle?: StyleProp<ViewStyle>
   /**
+   * 只支持行合并情况下控制内容高度
+   */
+  rowHeight?: number
+  /**
    * 定义表单列表
    */
   list: T[]
+  /**
+   * 表单列表可以分组
+   */
+  groupList?: (T & {children?: T[]})[]
   /**
    * 自定义该表单的头部(标题下一行)
    */
